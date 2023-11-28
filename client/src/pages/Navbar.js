@@ -1,14 +1,47 @@
-import React, { Fragment, useContext } from "react";
+import React, { Fragment, useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { UserContext } from "../components/UserContext";
 
 const Navbar = ({ children }) => {
   const user = useContext(UserContext);
+  const [isNavOpen, setNavOpen] = useState(false);
+
+  const toggleNav = () => {
+    setNavOpen(!isNavOpen);
+  };
 
   return (
     <Fragment>
+      {/* 미디어 쿼리를 사용하여 화면 너비에 따라 버튼 표시 여부 결정 */}
+      <button
+        className="navbar-toggler d-md-none position-fixed border rounded m-2 shadow bg-primary bg-gradient" // d-md-none 클래스 추가
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+        onClick={toggleNav}
+        style={{
+          width: "50px",
+          height: "50px",
+          bottom: "10px",
+          right: "10px",
+          backgroundColor: "#fff",
+          zIndex: 1000, // z-index 추가
+        }}
+      >
+        <span
+          className="bi bi-layout-sidebar-inset text-white"
+
+        ></span>
+      </button>
+
       <div
-        className="d-flex flex-column flex-shrink-0 p-3 border-end"
+        className={`collapse d-md-flex flex-column flex-shrink-0 p-3 border-end ${
+          isNavOpen ? "show" : ""
+        }`}
+        id="navbarNav"
         style={{ width: "300px" }}
       >
         <Link

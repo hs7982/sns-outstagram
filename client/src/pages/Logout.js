@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { UserContext } from "../components/UserContext";
+import { Link } from "react-router-dom";
 
 const Logout = () => {
   const user = useContext(UserContext);
@@ -22,7 +23,12 @@ const Logout = () => {
       >
         로그아웃
       </button>
+
+      <Link to="/setting">
+      <div>돌아가기</div>
+      </Link>
     </div>
+     
   );
 };
 

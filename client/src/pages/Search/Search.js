@@ -17,17 +17,14 @@ const setResult = (message) => {
     const postWriteDate = message.post_write_date;
 
     // Construct the HTML for each message
-    const messageHTML = `
+    const messageHTML = `<div className="col p-3" style={{ width: "330px", height:"330px"}}>
+    <a href="/postView/${message.post_id}">
       <img
                         src="/api/upload/${postImage}"
-                        className="d-block object-fit-contain h-100 mx-auto"
-                        style="max-width: 400px; width: 100%; height: auto;"
+                        className="d-block object-fit-cover border rounded"
+                        style="width: 330px; height: 330px;"
                       /></img>
-                    </div>
-        <p>User ID: ${message.post_user_id}</p>
-        <p>내용: ${postContent}</p>
-        <p>작성일: ${postWriteDate}</p>
-        <hr/>
+        </a>
       </div>
     `;
 
@@ -146,8 +143,13 @@ const Search = () => {
         </div>
         <div>
           <p className="text-start my-3 fw-bold">검색결과</p>
-          <div id="result"></div>
+          <div className="container"><div className="row row-cols-4" id="result"></div></div>
+          
         </div>
+
+        
+
+        
       </div>
     </div>
   );

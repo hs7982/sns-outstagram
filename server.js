@@ -9,6 +9,9 @@ const app = express();
 const api = require("./router/api");
 const user = require("./router/user");
 const posts = require("./router/posts");
+
+
+
 dotenv.config();
 
 app.use(express.json());

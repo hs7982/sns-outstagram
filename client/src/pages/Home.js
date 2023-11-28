@@ -6,23 +6,108 @@ const Home = () => {
   const [postData, setPostData] = useState([]);
   const [isEmptyPost, setEmptyPost] = useState(false);
   const [isError, setError] = useState(false);
+  const [likeStatus, setLikeStatus] = useState({});
+  const [likeCount, setLikeCount] = useState({});
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const result = await axios({
+          url: "/api/posts/feed",
+          method: "GET",
+          withCredentials: true,
+          timeout: 5000,
+        });
+
+        if (result.status === 204) {
+          setEmptyPost(true);
+        } else {
+          setPostData(result.data);
+          // 각 게시물에 대한 초기 좋아요 상태를 가져옴
+          for (const post of result.data) {
+            const like = await getLike(post.post_id);
+            const count = await getLikeCount(post.post_id);
+            setLikeStatus((prevLikeStatus) => ({
+              ...prevLikeStatus,
+              [post.post_id]: like,
+            }));
+            setLikeCount((prevLikeCount) => ({
+              ...prevLikeCount,
+              [post.post_id]: count,
+            }));
+          }
+        }
+      } catch (error) {
+        setError(true);
+        console.error("게시물을 불러오는 중 오류 발생:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const likeClick = (postId, liked) => {
+    let methods = "";
+    if (!liked) {
+      methods = "POST";
+    } else {
+      methods = "DELETE";
+    }
+
     axios({
-      url: "/api/posts/feed",
-      method: "GET",
+      method: methods,
+      url: `/api/posts/like/${postId}`,
       withCredentials: true,
       timeout: 5000,
     })
-      .then((result) => {
-        if (result.status === 204) setEmptyPost(true);
-        else setPostData(result.data);
+      .then(async (result) => {
+        console.log("성공", result);
+        setLikeStatus((prevLikeStatus) => ({
+          ...prevLikeStatus,
+          [postId]: !liked,
+        }));
+        const count = await getLikeCount(postId);
+        setLikeCount((prevLikeCount) => ({
+          ...prevLikeCount,
+          [postId]: count,
+        }));
       })
       .catch((error) => {
-        setError(true);
-        console.error("게시물을 불러오는 중 오류 발생:", error);
+        console.error("게시물 좋아요 중 오류:", error);
       });
-  }, []);
+  };
+
+  const getLike = async (postId) => {
+    try {
+      const result = await axios({
+        method: "GET",
+        url: `/api/posts/like/${postId}`,
+        withCredentials: true,
+        timeout: 5000,
+      });
+
+      return result.data; // true 또는 false 반환
+    } catch (error) {
+      console.error("좋아요 정보를 가져오는 중 오류:", error);
+      return false; // 에러 발생 시 기본값으로 false 반환
+    }
+  };
+
+  const getLikeCount = async (postId) => {
+    try {
+      const result = await axios({
+        method: "GET",
+        url: `/api/posts/like/count/${postId}`,
+        withCredentials: true,
+        timeout: 5000,
+      });
+
+      return result.data; //number반환
+    } catch (error) {
+      console.error("좋아요 정보를 가져오는 중 오류:", error);
+      return false; // 에러 발생 시 기본값으로 false 반환
+    }
+  };
 
   const parseImageUrls = (imageUrls) => {
     try {
@@ -57,12 +142,56 @@ const Home = () => {
       "요일"
     );
   };
+
+  const deletePost = async (postId) => {
+    if (window.confirm("정말 이 게시물을 삭제할까요?")) {
+      try {
+        const result = await axios({
+          method: "DELETE",
+          url: `/api/posts/post/${postId}`,
+          withCredentials: true,
+          timeout: 5000,
+        });
+
+        if (result.status === 200) {
+          // 삭제 성공
+          alert("게시물이 성공적으로 삭제되었습니다.");
+          window.location.reload();
+        } else {
+          // 삭제 실패
+          alert("ERROR:게시물 삭제 중 오류가 발생했습니다.");
+        }
+      } catch (error) {
+        if (error.code === "ERR_BAD_REQUEST") {
+          alert("게시물을 삭제할 권한이 없습니다.");
+        } else {
+          console.error("게시물을 삭제하던 중 오류:", error);
+          alert("게시물 삭제 중 오류가 발생했습니다.");
+        }
+      }
+    } else {
+    }
+  };
+
+  const copyClipBoard = (text) => {
+    try {
+      navigator.clipboard.writeText(text);
+      alert(
+        "공유 링크가 클립보드에 복사되었습니다.\n공유할 곳에 붙여넣어보세요."
+      );
+    } catch (err) {
+      alert("클립보드 복사에 실패하였습니다." + err);
+    }
+  };
+
   if (isEmptyPost)
     return (
       <div className="fs-3 m-auto">
         <i className="bi bi-exclamation-diamond"></i>
         <br />
-        표시할 게시물이 없습니다.<br/>새로운 글을 업로드해보세요!
+        표시할 게시물이 없습니다.
+        <br />
+        새로운 글을 업로드해보세요!
       </div>
     );
   else if (isError)
@@ -76,18 +205,20 @@ const Home = () => {
   else
     return (
       <div
-        className="mx-auto overflow-y-auto"
+        className="overflow-y-auto"
         id="content"
         style={{ width: "100%", whiteSpace: "pre-wrap" }}
       >
         {postData.map((post, index) => {
           const imageUrls = parseImageUrls(post.post_image_url);
           const imageUrlArray = Object.values(imageUrls[0]); // Convert object values to array
+          const like = likeStatus[post.post_id];
+          const countL = likeCount[post.post_id];
           return (
             <div
               key={index}
               className="feed-item card text-start mx-auto my-5 shadow-sm"
-              style={{ width: "768px" }}
+              style={{ width: "768px",maxWidth: "95%", maxHeight:"800px"}}
             >
               <div className="card-header d-flex">
                 <div className="fw-bold mb-0 me-auto">
@@ -111,13 +242,16 @@ const Home = () => {
                   </Link>
 
                   <ul className="dropdown-menu dropdown-menu text-small shadow">
-                  <li>
+                    <li>
                       <Link className="dropdown-item" to="">
                         <i className="bi bi-pencil-square"></i> 수정
                       </Link>
                     </li>
                     <li>
-                      <Link className="dropdown-item" to="">
+                      <Link
+                        className="dropdown-item"
+                        onClick={() => deletePost(post.post_id)}
+                      >
                         <span className="text-danger">
                           <i className="bi bi-trash"></i> 게시물 삭제
                         </span>
@@ -149,6 +283,7 @@ const Home = () => {
                         src={`/api/upload/${imageUrl}`}
                         className="d-block object-fit-contain h-100 mx-auto"
                         alt={`Slide ${imageIndex + 1}`}
+                        style={{ width: "100%" }}
                       />
                     </div>
                   ))}
@@ -183,13 +318,33 @@ const Home = () => {
                   </>
                 )}
               </div>
-              <div className="card-body">
+              <div className="card-body overflow-y-auto">
                 <span className="mb-3">
-                  <i className="bi bi-suit-heart fs-4"></i>{" "}
-                  <i className="bi bi-send fs-4 mx-1"></i>
+                  <i
+                    className={
+                      like
+                        ? "bi bi-suit-heart-fill fs-4 text-danger"
+                        : "bi bi-suit-heart fs-4"
+                    }
+                    onClick={() => likeClick(post.post_id, like)}
+                  ></i>{" "}
+                  <i
+                    className="bi bi-send fs-4 mx-1"
+                    onClick={() =>
+                      copyClipBoard(
+                        "http://43.202.142.114:3000/postView/" + post.post_id
+                      )
+                    }
+                  ></i>
                 </span>
-                <p className="fw-bold">좋아요 0개</p>
+                <p className="fw-bold">좋아요 {countL}개</p>
                 <p className="card-text">{post.post_content}</p>
+                <Link
+                  to={"/postView/" + post.post_id}
+                  className="text-secondary text-decoration-none"
+                >
+                  <span>댓글 및 상세내용 보기</span>
+                </Link>
               </div>
               <div className="card-footer">
                 <small className="text-muted">

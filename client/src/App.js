@@ -17,17 +17,16 @@ import Service from "./pages/Setting/Service";
 import LeaveAccount from "./pages/Setting/LeaveAccount";
 import WritePost from "./pages/WritePost";
 import Notice from "./pages/Notice";
-import SearchPost from "./pages/Search/SearchPost";
-import Tag from "./pages/Search/Tag";
-import Human from "./pages/Search/Human";
-import Place from "./pages/Search/Place";
 import FindPw from "./pages/FindPw";
 import Profile from "./pages/Profile";
 import Follow from "./pages/Profile/Follow";
 import Following from "./pages/Profile/Following";
 import Follower from "./pages/Profile/Follower";
+import Message from "./pages/Message";
 
 import Search from "./pages/Search/Search";
+import Admin from "./pages/Admin";
+import PostView from "./pages/PostView";
 
 
 function App() {
@@ -51,7 +50,10 @@ function App() {
   const AuthSearch = Auth(Search, true);
   const AuthLeaveAccount = Auth(LeaveAccount, true);
   const AuthWritePost = Auth(WritePost, true);
-  
+  const AuthAdmin = Auth(Admin, true, true);
+  const AuthPostView = Auth(PostView, true);
+
+
   return (
     <div className="App">
       <main className="d-flex flex-nowrap">
@@ -66,6 +68,8 @@ function App() {
           <Route path="/login" element={<Login changeNav={changeNav} />} />
           <Route path="/findpw" element={<FindPw changeNav={changeNav} />} />
           <Route path="/setting" element={<Info />} />
+
+          <Route path="/message" element={<Message />} />
           <Route path="/setting/pwchange" element={<AuthPwChange />} />
           <Route path="/setting/infochange" element={<AuthInfoChange />} />
           <Route path="/setting/tip" element={<Tip />} />
@@ -79,8 +83,10 @@ function App() {
           <Route path="/profile/follow" element={<Follow />} />
           <Route path="/profile/following" element={<Following />} />
           <Route path="/profile/follower" element={<Follower />} />
+          <Route path="/admin" element={<AuthAdmin/>}/>
+          <Route path="/postView/:postId" element={<AuthPostView />} />
 
-
+          {/* **항상 최하단위치 여기 아래론 라우트 X** */}
           <Route path="/*" element={<NotFound />} />
         </Routes>
       </main>

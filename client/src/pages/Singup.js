@@ -70,7 +70,7 @@ export default function Singup( {changeNav} ) {
           placeholder="성명"
           onChange={(e) => setName(e.target.value)}
         ></input>
-        <label htmlFor="floatingInput">성명</label>
+        <label htmlFor="floatingInput">성명 (ex: 홍길동)</label>
       </div>
       <div className="form-floating my-2">
         <input
@@ -80,7 +80,7 @@ export default function Singup( {changeNav} ) {
           placeholder="사용자 이름"
           onChange={(e) => setUserName(e.target.value)}
         ></input>
-        <label htmlFor="floatingInput">사용자 이름</label>
+        <label htmlFor="floatingInput">사용자 이름(계정명)</label>
       </div>
       <div className="form-floating my-2">
         <input
@@ -135,7 +135,7 @@ export default function Singup( {changeNav} ) {
         </div>
         <div>
           <p>
-            계정이 있으신가요?<Link to="/login" className="text-decoration-none">로그인</Link>
+            계정이 있으신가요? <Link to="/login" className="text-decoration-none">로그인</Link>
           </p>
         </div>
       </div>

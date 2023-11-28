@@ -2,6 +2,7 @@
 const { response } = require("express");
 const db = require("../database/db");
 const session = require("express-session");
+const upload = require("../multUpload");
 
 
 const login = (req, res) => {
@@ -15,6 +16,8 @@ const login = (req, res) => {
         req.session.isLogin = true;
         req.session.userIdNo = results[0].user_id_no;
         req.session.userEmail = results[0].user_email;
+        req.session.userName = results[0].user_name,
+        req.session.isAdmin = results[0].user_is_admin,
         req.session.save();
         res.status(200).json({
           isLogin: true,
@@ -31,6 +34,34 @@ const login = (req, res) => {
     }
   );
 };
+
+const getmyinfo = (req, res) => {
+  if (req.session.isLogin) {
+    db.query(
+      "SELECT * FROM `user` WHERE `user_id_no` = ?",
+      [req.session.userIdNo],
+      (err, results) => {
+        if (err) throw err;
+        if (results.length > 0) {
+          res.status(200).json({
+            isLogin: true,
+            userIdNo: results[0].user_id_no,
+            userEmail: results[0].user_email,
+            userName: results[0].user_name,
+            userRealName: results[0].user_real_name,
+            userProfileImg: results[0].user_image,
+            userTel: results[0].user_tel,
+          });
+        } else {
+          res.status(200).json({ isLogin: false });
+        }
+      }
+    );
+  } else {
+    res.status(200).json({ isLogin: false });
+  }
+};
+
 
 const logout = (req, res) => {
   if (!req.session.userIdNo) {
@@ -78,30 +109,6 @@ const singup = (req, res) => {
   );
 };
 
-const getmyinfo = (req, res) => {
-  if (req.session.isLogin) {
-    db.query(
-      "SELECT * FROM `user` WHERE `user_id_no` = ?",
-      [req.session.userIdNo],
-      (err, results) => {
-        if (err) throw err;
-        if (results.length > 0) {
-          res.status(200).json({
-            isLogin: true,
-            userIdNo: results[0].user_id_no,
-            userEmail: results[0].user_email,
-            userName: results[0].user_name,
-            userProfileImg: results[0].user_image,
-          });
-        } else {
-          res.status(200).json({ isLogin: false });
-        }
-      }
-    );
-  } else {
-    res.status(200).json({ isLogin: false });
-  }
-};
 
 const getUserInfo = (req, res) => {
   const userId = req.params.id;
@@ -182,6 +189,134 @@ const leaveId = (req, res) => {
   }
 };
 
+const changeProfileImg = [
+  upload.array("profileImage"),
+  (req, res) => {
+    if (req.session.isLogin) {
+      const userId = req.session.userIdNo;
+      const imageUrls = req.files[0].filename;
+
+
+      db.query(
+        "UPDATE `outstagram`.`user` SET `user_image`=? WHERE  `user_id_no`=?",
+        [imageUrls, userId],
+        (err, results) => {
+          if (err) {
+            res.status(500).json("서버에러입니다.");
+            console.log(err);
+          } else res.status(200).json("프로필 사진이 성공적으로 업데이트 되었습니다.");
+        }
+      );
+    }
+  },
+];
+
+// 팔로우 추가
+const followUser = (req, res) => {
+  if (req.session.isLogin) {
+    const userId = req.session.userIdNo;
+    const followedId = Number(req.body.followingId);
+
+    const sql = "INSERT INTO follows (user_id, followed_user_id) VALUES (?, ?)";
+    const values = [userId, followedId];
+
+    db.query(sql, values, (err, results) => {
+      if (err) {
+        console.error("Error executing SQL query:", err);
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
+
+      if (results.affectedRows > 0) {
+        // Return success response
+        return res.status(201).json( "팔로우성공" );
+      } else {
+        res.status(400).json("팔로우 실패");
+      }
+    });
+  } else {
+    res.status(401).json({ error: "로그인이 필요합니다." });
+  }
+};
+
+// 팔로우 취소
+const unfollowUser = (req, res) => {
+  if (req.session.isLogin) {
+    const userId = req.session.userIdNo;
+    const followedId = Number(req.body.followingId);
+
+    const sql = "DELETE FROM follows WHERE user_id = ? AND followed_user_id = ?";
+    const values = [userId, followedId];
+
+    db.query(sql, values, (err, results) => {
+      if (err) {
+        console.error("Error executing SQL query:", err);
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
+      
+      
+
+      if (results.affectedRows > 0) {
+        // Return success response
+        return res.status(200).json( "팔로우 취소 성공" );
+      } else {
+        res.status(400).json("팔로우 취소에 실패하였습니다.");
+      }
+    });
+  } else {
+    res.status(401).json({ error: "로그인이 필요합니다." });
+  }
+};
+
+// 팔로우 갯수 조회
+const getFollowerNum = (req, res) => {
+  if (req.session.isLogin) {
+    const userId = Number(req.params.id);
+
+    const sql = "SELECT COUNT(*) AS followCount FROM follows WHERE followed_user_id = ?";
+    const values = [userId];
+
+    db.query(sql, values, (err, results) => {
+      if (err) {
+        console.error("Error executing SQL query:", err);
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
+
+      const followCount = results[0].followCount;
+
+      // 팔로우 갯수를 클라이언트에게 반환
+      return res.status(200).json({ followCount });
+    });
+  } else {
+    res.status(401).json({ error: "로그인이 필요합니다." });
+  }
+};
+
+// 팔로잉 수 계산
+const followingNum = (req, res) => {
+  if (req.session.isLogin) {
+    const userId = Number(req.params.id);
+
+    const sql = "SELECT COUNT(*) AS followCount FROM follows WHERE user_id = ?";
+    const values = [userId];
+
+    db.query(sql, values, (err, results) => {
+      if (err) {
+        console.error("Error executing SQL query:", err);
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
+
+      const followCount = results[0].followCount;
+
+      // 팔로우 갯수를 클라이언트에게 반환
+      return res.status(200).json({ followCount });
+    });
+  } else {
+    res.status(401).json({ error: "로그인이 필요합니다." });
+  }
+};
+
+
+
 module.exports = {
   login,
   logout,
@@ -189,5 +324,12 @@ module.exports = {
   getmyinfo,
   pwChange,
   leaveId,
-  getUserInfo
+  getUserInfo,
+  followUser,
+  unfollowUser,
+  getFollowerNum,
+  followingNum,
+
+  changeProfileImg
+  
 };
