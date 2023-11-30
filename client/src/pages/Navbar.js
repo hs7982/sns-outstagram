@@ -10,32 +10,49 @@ const Navbar = ({ children }) => {
     setNavOpen(!isNavOpen);
   };
 
+  const closeNav = () => {
+    setNavOpen(false);
+  }
+
   return (
     <Fragment>
       {/* 미디어 쿼리를 사용하여 화면 너비에 따라 버튼 표시 여부 결정 */}
-      <button
-        className="navbar-toggler d-md-none position-fixed border rounded m-2 shadow bg-primary bg-gradient" // d-md-none 클래스 추가
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarNav"
-        aria-controls="navbarNav"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-        onClick={toggleNav}
-        style={{
-          width: "50px",
-          height: "50px",
-          bottom: "10px",
-          right: "10px",
-          backgroundColor: "#fff",
-          zIndex: 1000, // z-index 추가
-        }}
+      <div
+        className="d-md-none position-fixed w-100 bg-light shadow d-flex"
+        id="mobile-header"
+        style={{ zIndex: 1000}}
       >
-        <span
-          className="bi bi-layout-sidebar-inset text-white"
-
-        ></span>
-      </button>
+        <button
+          className="navbar-toggler border rounded m-2" // d-md-none 클래스 추가
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+          onClick={toggleNav}
+          style={{
+            width: "50px",
+            height: "50px",
+            top: "10px",
+            left: "10px",
+            backgroundColor: "#fff",
+          }}
+        >
+          <i
+            className="bi bi-list text-dark"
+            style={{ fontSize: "1.5rem" }}
+          ></i>
+        </button>
+        <Link to="/" className="ms-2 my-auto text-dark text-decoration-none">
+          <h1
+            className="h1 mt-2 text-center my-auto"
+            style={{ fontFamily: "Just Another Hand, cursive", fontSize:"2rem"}}
+          >
+            OUTSTAGRAM
+          </h1>
+        </Link>
+      </div>
 
       <div
         className={`collapse d-md-flex flex-column flex-shrink-0 p-3 border-end ${
@@ -61,6 +78,7 @@ const Navbar = ({ children }) => {
               className="nav-link text-dark text-decoration-none mb-3 text-start"
               aria-current="page"
               to="/"
+              onClick={()=>closeNav()}
             >
               <i
                 className="bi bi-house-door me-2"
@@ -73,6 +91,7 @@ const Navbar = ({ children }) => {
             <Link
               className="nav-link text-dark text-decoration-none mb-3 text-start"
               to="/search"
+              onClick={()=>closeNav()}
             >
               <i
                 className="bi bi-search me-2"
@@ -85,6 +104,7 @@ const Navbar = ({ children }) => {
             <Link
               className="nav-link text-dark text-decoration-none mb-3 text-start"
               to="/message"
+              onClick={()=>closeNav()}
             >
               <i
                 className="bi bi-chat-left me-2"
@@ -97,6 +117,7 @@ const Navbar = ({ children }) => {
             <Link
               className="nav-link  text-dark text-decoration-none mb-3 text-start"
               to="/notice"
+              onClick={()=>closeNav()}
             >
               <i className="bi bi-bell me-2" style={{ fontSize: "1.5rem" }}></i>{" "}
               알림
@@ -106,6 +127,7 @@ const Navbar = ({ children }) => {
             <Link
               className="nav-link  text-dark text-decoration-none mb-3 text-start"
               to="/profile"
+              onClick={()=>closeNav()}
             >
               <i
                 className="bi bi-person me-2"
@@ -118,6 +140,7 @@ const Navbar = ({ children }) => {
             <Link
               className="nav-link  text-dark text-decoration-none mb-3 text-start"
               to="/writepost"
+              onClick={()=>closeNav()}
             >
               <i
                 className="bi bi-plus-circle me-2"
@@ -130,6 +153,7 @@ const Navbar = ({ children }) => {
             <Link
               className="nav-link  text-dark text-decoration-none mb-3 text-start"
               to="/setting"
+              onClick={()=>closeNav()}
             >
               <i className="bi bi-gear me-2" style={{ fontSize: "1.5rem" }}></i>{" "}
               설정
@@ -156,7 +180,7 @@ const Navbar = ({ children }) => {
           </Link>
           <ul className="dropdown-menu dropdown-menu text-small shadow">
             <li>
-              <Link className="dropdown-item" to="/logout">
+              <Link className="dropdown-item" to="/logout" onClick={()=>closeNav()}>
                 로그아웃
               </Link>
             </li>

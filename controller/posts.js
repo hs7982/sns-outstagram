@@ -229,6 +229,31 @@ const getLikePost = (req, res) => {
   }
 };
 
+const getLikeList = (req, res) => {
+  const postId = Number(req.params.id);
+
+  if (req.session.isLogin) {
+    const sql = "SELECT like_user_id, user_name, user_real_name, user_image FROM `outstagram`.`post_likes` LEFT OUTER JOIN user ON post_likes.like_user_id = user.user_id_no WHERE like_post_id =?";
+    const values = [postId];
+
+    db.query(sql, values, (err, results) => {
+      if (err) {
+        console.error("Error executing SQL query:", err);
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
+
+      if (results.length > 0) {
+        // Return success response
+        return res.status(200).json(results);
+      } else {
+        return res.status(204).json("게시물에 좋아요를 표시한 사용자가 없습니다.");
+      }
+    });
+  } else {
+    res.status(401).json({ error: "로그인이 필요합니다." });
+  }
+};
+
 const countLikes = (req, res) => {
   const postId = Number(req.params.id);
 
@@ -307,5 +332,6 @@ module.exports = {
   countLikes,
   postComment,
   getComment,
-  postReport
+  postReport,
+  getLikeList
 };

@@ -84,7 +84,7 @@ const Search = () => {
   };
 
   return (
-    <div className="m-4 overflow-auto" style={{ width: "100%" }}>
+    <div className="m-4 overflow-auto">
       <form className="d-flex overflow-auto" role="search">
         <input
           className="form-control"

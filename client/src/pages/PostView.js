@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useParams } from "react-router-dom";
+import LikeList from "./LikeList";
 
 const PostView = () => {
   const params = useParams();
@@ -236,11 +237,10 @@ const PostView = () => {
         style={{
           width: "100%",
           whiteSpace: "pre-wrap",
-          overflowY: "scroll",
           maxHeight: "100vh",
         }}
       >
-        <div className="my-4">
+        <div className="my-3">
           <h2>게시물 상세보기</h2>
         </div>
         {postData.map((post, index) => {
@@ -248,6 +248,7 @@ const PostView = () => {
           const imageUrlArray = Object.values(imageUrls[0]); // Convert object values to array
           const like = likeStatus;
           const countL = likeCount;
+          const modalId = `modal-${post.post_id}`;
           return (
             <div className="card-group m-3" key={index}>
               <div
@@ -256,14 +257,19 @@ const PostView = () => {
               >
                 <div className="card-header d-flex">
                   <div className="fw-bold mb-0 me-auto">
-                    <img
-                      src={"/api/upload/profile/" + post.user_image}
-                      alt=""
-                      width="32"
-                      height="32"
-                      className="rounded-circle me-2 bg-secondary-subtle object-fit-cover border"
-                    ></img>
-                    {post.user_name}
+                    <Link
+                      to={"/profile/" + post.post_user_id}
+                      className="text-decoration-none text-dark"
+                    >
+                      <img
+                        src={"/api/upload/profile/" + post.user_image}
+                        alt=""
+                        width="32"
+                        height="32"
+                        className="rounded-circle me-2 bg-secondary-subtle object-fit-cover border"
+                      ></img>
+                      {post.user_name}
+                    </Link>
                   </div>
                   <div className="dropdown">
                     <Link
@@ -276,6 +282,14 @@ const PostView = () => {
                     </Link>
 
                     <ul className="dropdown-menu dropdown-menu text-small shadow">
+                    <li>
+                      <Link
+                        className="dropdown-item"
+                        to={"/profile/" + post.post_user_id}
+                      >
+                        <i className="bi bi-person-circle"></i> 프로필 보기
+                      </Link>
+                    </li>
                       <li>
                         <Link className="dropdown-item" to="">
                           <i className="bi bi-pencil-square"></i> 수정
@@ -371,7 +385,18 @@ const PostView = () => {
                       }
                     ></i>
                   </span>
-                  <p className="fw-bold">좋아요 {countL}개</p>
+                  <div>
+                    <Link className="text-decoration-none text-dark">
+                      <span
+                        className="fw-bold"
+                        data-bs-toggle="modal"
+                        data-bs-target={`#${modalId}`}
+                      >
+                        좋아요 {countL}개
+                      </span>
+                    </Link>
+                    <LikeList postId={post.post_id} count={countL} />
+                  </div>
 
                   <p className="card-text ">{post.post_content}</p>
                 </div>

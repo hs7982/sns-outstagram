@@ -104,7 +104,7 @@ const WritePost = () => {
   };
 
   return (
-    <div className="m-4 overflow-auto" style={{ width: "100%" }}>
+    <div className="m-4">
       <div className="mb-5">
         <h2>게시물 업로드</h2>
       </div>

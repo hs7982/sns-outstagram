@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../database/db");
 
-const { posts, writeNewPost, getPost, delPost, searchPost, likePost, unLikePost, getLikePost, countLikes, postComment, getComment } = require("../controller/posts");
+const { posts, writeNewPost, getPost, delPost, searchPost, likePost, unLikePost, getLikePost, countLikes, postComment, getComment, getLikeList } = require("../controller/posts");
 
 //일반라우팅
 
@@ -19,6 +19,8 @@ router.get("/comment/:id", getComment)
 router.get("/search/:keyword", searchPost);
 
 router.get("/like/count/:id", countLikes);
+
+router.get("/like/list/:id", getLikeList);
 
 router.get("/like/:id", getLikePost);
 

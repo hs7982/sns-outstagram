@@ -4,9 +4,9 @@ import SettingNav from "./SettingNav";
 
 const Service = () => {
     return (
-        <div className="d-flex" style={{width:'100%'}}>
+        <div className="d-flex flex-wrap" style={{width:'100%'}}>
           <SettingNav />
-          <div className="m-5" style={{width:'100%'}}>
+          <div className="m-5 mx-auto">
             <div className="fs-3">도움말</div>
             <div className="my-5">
               <p class="fs-3">무엇을 도와드릴까요?</p>

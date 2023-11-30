@@ -52,6 +52,7 @@ function App() {
   const AuthWritePost = Auth(WritePost, true);
   const AuthAdmin = Auth(Admin, true, true);
   const AuthPostView = Auth(PostView, true);
+  const AuthProfile = Auth(Profile, true);
 
 
   return (
@@ -60,6 +61,8 @@ function App() {
         <h1 className="visually-hidden">OUTSTAGRAM</h1>
 
         {showNav && <AuthNavbar />}
+        <div className="flex-column w-100 overflow-y-auto">
+        <div className="w-100 d-md-none" style={{height:"80px"}}></div>
 
         <Routes>
           <Route path="/" element={<AuthHome />} />
@@ -79,16 +82,15 @@ function App() {
           <Route path="/writepost" element={<AuthWritePost />} />
           <Route path="/notice" element={<Notice />} />
           <Route path="/search" element={<AuthSearch />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/profile/follow" element={<Follow />} />
-          <Route path="/profile/following" element={<Following />} />
-          <Route path="/profile/follower" element={<Follower />} />
+          <Route path="/profile" element={<AuthProfile />} />
+          <Route path="/profile/:id" element={<AuthProfile />} />
           <Route path="/admin" element={<AuthAdmin/>}/>
           <Route path="/postView/:postId" element={<AuthPostView />} />
 
           {/* **항상 최하단위치 여기 아래론 라우트 X** */}
           <Route path="/*" element={<NotFound />} />
         </Routes>
+        </div>
       </main>
     </div>
   );

@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../database/db");
 
-const { login, logout, singup, getmyinfo, pwChange, leaveId, getUserInfo, changeProfileImg, followUser, unfollowUser,getFollowerNum,followingNum  } = require("../controller/user");
+const { login, logout, singup, getmyinfo, pwChange, leaveId, getUserInfo, changeProfileImg, followUser, unfollowUser,getFollowerNum,followingNum, isFollowing  } = require("../controller/user");
 
 
 
@@ -25,6 +25,8 @@ router.get("/:id", getUserInfo)
 
 router.post('/follow', followUser);
 router.post('/unfollow', unfollowUser);
+
+router.get('/isFollowing/:id', isFollowing);
 
 router.get('/followerNum/:id', getFollowerNum);
 router.get('/followingNum/:id', followingNum);

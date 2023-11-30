@@ -49,9 +49,9 @@ const InfoChange = () => {
   };
   return (
     //성명, 사용자 이름, 전화번호 변경
-    <div className="d-flex" style={{ width: "100%" }}>
+    <div className="d-flex flex-wrap" style={{ width: "100%" }}>
       <SettingNav />
-      <div className="overflow-y-auto my-3 w-auto mx-auto">
+      <div className="overflow-y-auto my-3 mx-auto">
         <div className="fs-3">정보 변경</div>
 
         <div>

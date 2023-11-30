@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import LikeList from "./LikeList";
 
 const Home = () => {
   const [postData, setPostData] = useState([]);
@@ -204,33 +205,36 @@ const Home = () => {
     );
   else
     return (
-      <div
-        className="overflow-y-auto"
-        id="content"
-        style={{ width: "100%", whiteSpace: "pre-wrap" }}
-      >
+      <div className="mt-2" id="content" style={{ whiteSpace: "pre-wrap" }}>
         {postData.map((post, index) => {
           const imageUrls = parseImageUrls(post.post_image_url);
           const imageUrlArray = Object.values(imageUrls[0]); // Convert object values to array
           const like = likeStatus[post.post_id];
           const countL = likeCount[post.post_id];
+          const modalId = `modal-${post.post_id}`;
           return (
             <div
               key={index}
-              className="feed-item card text-start mx-auto my-5 shadow-sm"
-              style={{ width: "768px",maxWidth: "95%", maxHeight:"800px"}}
+              className="feed-item card text-start mx-auto mb-5 shadow-sm"
+              style={{ width: "768px", maxWidth: "95%", maxHeight: "800px" }}
             >
               <div className="card-header d-flex">
                 <div className="fw-bold mb-0 me-auto">
-                  <img
-                    src={"/api/upload/profile/" + post.user_image}
-                    alt=""
-                    width="32"
-                    height="32"
-                    className="rounded-circle me-2 bg-secondary-subtle object-fit-cover border"
-                  ></img>
-                  {post.user_name}
+                  <Link
+                    to={"/profile/" + post.post_user_id}
+                    className="text-decoration-none text-dark"
+                  >
+                    <img
+                      src={"/api/upload/profile/" + post.user_image}
+                      alt=""
+                      width="32"
+                      height="32"
+                      className="rounded-circle me-2 bg-secondary-subtle object-fit-cover border"
+                    ></img>
+                    {post.user_name}
+                  </Link>
                 </div>
+
                 <div className="dropdown">
                   <Link
                     href="#"
@@ -242,6 +246,14 @@ const Home = () => {
                   </Link>
 
                   <ul className="dropdown-menu dropdown-menu text-small shadow">
+                    <li>
+                      <Link
+                        className="dropdown-item"
+                        to={"/profile/" + post.post_user_id}
+                      >
+                        <i className="bi bi-person-circle"></i> 프로필 보기
+                      </Link>
+                    </li>
                     <li>
                       <Link className="dropdown-item" to="">
                         <i className="bi bi-pencil-square"></i> 수정
@@ -337,7 +349,18 @@ const Home = () => {
                     }
                   ></i>
                 </span>
-                <p className="fw-bold">좋아요 {countL}개</p>
+                <div>
+                  <Link className="text-decoration-none text-dark">
+                    <span
+                      className="fw-bold"
+                      data-bs-toggle="modal"
+                      data-bs-target={`#${modalId}`}
+                    >
+                      좋아요 {countL}개
+                    </span>
+                  </Link>
+                  <LikeList postId={post.post_id} count={countL} />
+                </div>
                 <p className="card-text">{post.post_content}</p>
                 <Link
                   to={"/postView/" + post.post_id}

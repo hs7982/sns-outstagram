@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import SettingNav from "./SettingNav";
 
 const LeaveAccount = () => {
   const appendAlert = (message, type) => {
@@ -34,25 +35,28 @@ const LeaveAccount = () => {
   };
 
   return (
-    <div className="m-auto" style={{ width: "100%" }}>
-      <h1 className="mt-5">
-        <i className="bi bi-exclamation-diamond"></i>
-        <br />
-        회원 탈퇴를 하시겠습니까?
-      </h1>
-      <p className="m-3">
-        탈퇴 시 관련된 모든 정보가 삭제되며, 복구가 불가능합니다.
-      </p>
-      <button
-        type="button"
-        className="btn btn-primary my-3"
-        onClick={LeaveAccountProcess}
-      >
-        회원 탈퇴
-      </button>
-      <Link to="/setting">
-        <p>돌아가기</p>
-      </Link>
+    <div className="d-flex flex-wrap m-auto" style={{ width: "100%" }}>
+      <SettingNav />
+      <div className="mx-auto">
+        <h1 className="mt-5">
+          <i className="bi bi-exclamation-diamond"></i>
+          <br />
+          회원 탈퇴를 하시겠습니까?
+        </h1>
+        <p className="m-3">
+          탈퇴 시 관련된 모든 정보가 삭제되며, 복구가 불가능합니다.
+        </p>
+        <button
+          type="button"
+          className="btn btn-primary my-3"
+          onClick={LeaveAccountProcess}
+        >
+          회원 탈퇴
+        </button>
+        <Link to="/setting">
+          <p>돌아가기</p>
+        </Link>
+      </div>
     </div>
   );
 };
