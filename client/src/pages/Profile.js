@@ -11,6 +11,7 @@ const Profile = () => {
   const [isFollowing, setIsFollowing] = useState(false);
   const [followerCount, setFollowerCount] = useState(0);
   const [followingCount, setFollowingCount] = useState(0);
+  const [userPosts, setUserPosts] = useState([]);
   const [isErr, setIsErr] = useState(false);
   const [isNoUser, setIsNoUser] = useState(false);
 
@@ -73,6 +74,18 @@ const Profile = () => {
         if (followingResult.status === 200) {
           setFollowingCount(followingResult.data);
         }
+
+        //게시물 불러오기
+        const postsResult = await axios({
+          method: "GET",
+          url: `/api/posts/post/user/${userId}`,
+          withCredentials: true,
+          timeout: 5000,
+        });
+
+        if (postsResult.status === 200) {
+          setUserPosts(postsResult.data);
+        }
       } catch (error) {
         setIsErr(true);
         console.error("데이터를 가져오는 중 오류:", error);
@@ -134,7 +147,7 @@ const Profile = () => {
     );
   } else
     return (
-      <div class="m-2 text-center">
+      <div class="m-3 text-center">
         <div>
           <p class="fw-bold fs-3 text-start mb-3">프로필</p>
         </div>
@@ -199,26 +212,27 @@ const Profile = () => {
         </div>
         <div>
           <hr />
-          <div class="card mt-4" style={{ width: "18rem;" }}>
-            <div class="card-body">
-              <h5 class="card-title">게시물1</h5>
-            </div>
-          </div>
-
-          <div class="card my-3" style={{ width: "18rem;" }}>
-            <div class="card-body">
-              <h5 class="card-title">게시물2</h5>
-            </div>
-          </div>
-
-          <div class="card" style={{ width: "18rem;" }}>
-            <div class="card-body">
-              <h5 class="card-title">게시물3</h5>
+          <div className="container text-center">
+            <div className="row row-cols-1 row-cols-md-4 g-4 ">
+              {userPosts.map((post, index) => (
+                <div key={index} className="col profile-square px-1">
+                  <Link to={`/postView/${post.post_id}`}>
+                    <div className="card h-100">
+                      <img
+                        src={`/api/upload/${JSON.parse(post.post_image_url)[0]}`}
+                        className="inner d-block object-fit-cover rounded"
+                        alt={`Post ${index + 1}`}
+                      />
+                    </div>
+                  </Link>
+                </div>
+              ))}
             </div>
           </div>
         </div>
       </div>
     );
+  
 };
 
 export default Profile;

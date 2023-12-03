@@ -2,53 +2,11 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
-const setResult = (message) => {
-  const alertPlaceholder = document.getElementById("result");
-  alertPlaceholder.innerHTML = "";
-
-  // Iterate through the messages array
-  message.forEach((message) => {
-    // Create a div element for each message
-    const messageDiv = document.createElement("div");
-
-    // Extracting properties from the message object
-    const postContent = message.post_content;
-    const postImage = JSON.parse(message.post_image_url)["0"];
-    const postWriteDate = message.post_write_date;
-
-    // Construct the HTML for each message
-    const messageHTML = `<div className="col p-3" style={{ width: "330px", height:"330px"}}>
-    <a href="/postView/${message.post_id}">
-      <img
-                        src="/api/upload/${postImage}"
-                        className="d-block object-fit-cover border rounded"
-                        style="width: 330px; height: 330px;"
-                      /></img>
-        </a>
-      </div>
-    `;
-
-    // Set the innerHTML of the message div
-    messageDiv.innerHTML = messageHTML;
-
-    // Append the message div to the alertPlaceholder
-    alertPlaceholder.appendChild(messageDiv);
-  });
-};
-
-const setErrResult = (message, type) => {
-  const alertPlaceholder = document.getElementById("result");
-  alertPlaceholder.innerHTML = [
-    `<div class="alert alert-${type} alert-dismissible fade show" role="alert">`,
-    `   <div><i class="bi bi-exclamation-triangle-fill"></i> ${message}</div>`,
-    '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
-    "</div>",
-  ].join("");
-};
-
 const Search = () => {
   const [currSearch, setCurrSearch] = useState("post");
   const [keyword, setKeyword] = useState("");
+  const [searchResult, setSearchResult] = useState([]);
+  const [error, setError] = useState(null);
 
   const currKeyword = () => {
     switch (currSearch) {
@@ -65,7 +23,7 @@ const Search = () => {
     }
   };
 
-  const Search = () => {
+  const performSearch = () => {
     axios({
       url: currKeyword(),
       method: "GET",
@@ -75,82 +33,92 @@ const Search = () => {
       .then((result) => {
         console.log(result.data);
         if (result.status === 204) {
-          setErrResult("검색 결과가 없습니다.", "warning");
+          setError("검색 결과가 없습니다.");
+          setSearchResult([]);
         } else if (result.status === 200) {
-          setResult(result.data);
+          setError(null);
+          setSearchResult(result.data);
         }
       })
-      .catch((error) => {});
+      .catch(() => {
+        setError("검색 중 오류가 발생했습니다.");
+        setSearchResult([]);
+      });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    performSearch();
   };
 
   return (
-    <div className="m-4 overflow-auto">
-      <form className="d-flex overflow-auto" role="search">
-        <input
-          className="form-control"
-          type="search"
-          placeholder="검색어 입력"
-          onChange={(e) => setKeyword(e.target.value)}
-          aria-label="Search"
-        />
-        <Link>
+    <div className="d-flex flex-column justify-content-between m-3"> {/* Set the container to take up the full height */}
+      <div>
+        <form className="d-flex align-items-center" role="search" onSubmit={handleSubmit}>
+          <input
+            className="form-control"
+            type="search"
+            placeholder="검색어 입력"
+            value={keyword}
+            onChange={(e) => setKeyword(e.target.value)}
+            aria-label="Search"
+          />
           <button
             className="btn btn-outline-success"
             type="submit"
-            onClick={() => Search()}
-            style={{ width: "5rem" }}
+            style={{width: "5rem"}}
           >
             검색
           </button>
-        </Link>
-      </form>
-      <div>
-        <div class="my-3 container text-center">
-          <div class="d-flex">
-            <div class="flex-fill border-dark-subtle border-end">
-              <Link
-                className="mx-auto text-dark text-decoration-none"
-                onClick={() => setCurrSearch("post")}
+        </form>
+        <div className="my-3 container text-center">
+          <div className="d-flex">
+            {["post", "tag", "user", "place"].map((searchType) => (
+              <div
+                key={searchType}
+                className={`flex-fill border-dark-subtle border-end ${
+                  currSearch === searchType ? "active" : ""
+                }`}
               >
-                게시물
-              </Link>
-            </div>
-            <div class="flex-fill  border-dark-subtle border-end">
-              <Link
-                className="mx-auto text-dark text-decoration-none"
-                onClick={() => setCurrSearch("tag")}
-              >
-                태그
-              </Link>
-            </div>
-            <div class="flex-fill border-dark-subtle border-end">
-              <Link
-                className="mx-auto text-dark text-decoration-none"
-                onClick={() => setCurrSearch("user")}
-              >
-                사람
-              </Link>
-            </div>
-            <div class="flex-fill">
-              <Link
-                className="mx-auto text-dark text-decoration-none"
-                onClick={() => setCurrSearch("place")}
-              >
-                장소
-              </Link>
-            </div>
+                <Link
+                  className="mx-auto text-dark text-decoration-none"
+                  onClick={() => setCurrSearch(searchType)}
+                >
+                  {searchType === "post" && "게시물"}
+                  {searchType === "tag" && "태그"}
+                  {searchType === "user" && "사람"}
+                  {searchType === "place" && "장소"}
+                </Link>
+              </div>
+            ))}
           </div>
         </div>
         <div>
           <p className="text-start my-3 fw-bold">검색결과</p>
-          <div className="container"><div className="row row-cols-4" id="result"></div></div>
-          
+          {error && (
+            <div className="alert alert-warning" role="alert">
+              {error}
+            </div>
+          )}
+          <div className="container">
+            <div className="row row-cols-4" id="result">
+              {searchResult.map((message) => (
+                <div key={message.post_id} className="col p-3" style={{ width: "330px", height: "330px" }}>
+                  <Link to={`/postView/${message.post_id}`}>
+                    <img
+                      src={`/api/upload/${JSON.parse(message.post_image_url)["0"]}`}
+                      className="d-block object-fit-cover border rounded"
+                      style={{ width: "330px", height: "330px" }}
+                      alt=""
+                    />
+                  </Link>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
-
-        
-
-        
       </div>
+      {/* Additional content or spacing can be added here */}
     </div>
   );
 };

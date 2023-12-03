@@ -9,13 +9,13 @@ import { UserProvider } from "./components/UserContext";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 const store = localStorage.getItem('user');
 root.render(
-  <React.StrictMode>
+ // <React.StrictMode>
     <UserProvider value={store}>
       <BrowserRouter>
         <App />
       </BrowserRouter>
     </UserProvider>
-  </React.StrictMode>
+ // </React.StrictMode>
 );
 
 

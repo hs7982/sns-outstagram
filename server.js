@@ -4,6 +4,7 @@ const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const sessiondb = require("express-mysql-session")(session);
 const db = require("./database/db");
+const path = require('path');
 
 const app = express();
 const api = require("./router/api");
@@ -56,11 +57,19 @@ app.use((err, req, res, next) => {
   res.send(err.toString());
 });
 
+
+
 app.use("/api/user", user);
 app.use("/api/posts", posts);
 app.use("/api/upload", express.static("./upload"));
 
 app.use("/api", api);
+
+const root = require('path').join(__dirname, 'client', 'build')
+app.use(express.static(root));
+app.get("*", (req, res) => {
+    res.sendFile('index.html', { root });
+})
 
 const port = process.env.PORT;
 app.listen(port, () => {

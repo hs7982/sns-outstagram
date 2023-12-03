@@ -100,6 +100,31 @@ const getPost = (req, res) => {
   }
 }
 
+const getUserPost = (req, res) => {
+  const userId = Number(req.params.id);
+
+  if (req.session.isLogin) {
+    const sql = "SELECT post_id, post_user_id, post_content, post_image_url, post_hits, post_write_date, user_name, user_image FROM post LEFT OUTER JOIN user ON post.post_user_id = user.user_id_no WHERE user_id_no = ? ORDER BY post_write_date desc";
+    const values = [userId];
+
+    db.query(sql, values, (err, results) => {
+      if (err) {
+        console.error("Error executing SQL query:", err);
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
+
+      if (results.length > 0) {
+        // Return success response
+        return res.status(200).json(results);
+      } else {
+        res.status(400).json("조회된 게시물이 없습니다.");
+      }
+    });
+  } else {
+    res.status(401).json({ error: "로그인이 필요합니다." });
+  }
+}
+
 const delPost = (req, res) => {
   const postId = req.params.id;
 
@@ -333,5 +358,6 @@ module.exports = {
   postComment,
   getComment,
   postReport,
-  getLikeList
+  getLikeList,
+  getUserPost
 };

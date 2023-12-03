@@ -102,19 +102,6 @@ const Navbar = ({ children }) => {
           </li>
           <li className="nav-item">
             <Link
-              className="nav-link text-dark text-decoration-none mb-3 text-start"
-              to="/message"
-              onClick={()=>closeNav()}
-            >
-              <i
-                className="bi bi-chat-left me-2"
-                style={{ fontSize: "1.5rem" }}
-              ></i>{" "}
-              메시지
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link
               className="nav-link  text-dark text-decoration-none mb-3 text-start"
               to="/notice"
               onClick={()=>closeNav()}
@@ -161,8 +148,9 @@ const Navbar = ({ children }) => {
           </li>
         </ul>
 
-        <hr />
+
         <div className="dropdown ms-2">
+        <hr />
           <Link
             href="#"
             className="d-flex align-items-center text-black text-decoration-none dropdown-toggle"

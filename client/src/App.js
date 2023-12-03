@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
 import "./App.css";
@@ -19,11 +19,7 @@ import WritePost from "./pages/WritePost";
 import Notice from "./pages/Notice";
 import FindPw from "./pages/FindPw";
 import Profile from "./pages/Profile";
-import Follow from "./pages/Profile/Follow";
-import Following from "./pages/Profile/Following";
-import Follower from "./pages/Profile/Follower";
 import Message from "./pages/Message";
-
 import Search from "./pages/Search/Search";
 import Admin from "./pages/Admin";
 import PostView from "./pages/PostView";

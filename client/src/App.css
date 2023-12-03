@@ -152,3 +152,22 @@ color: rgba(var(--bs-emphasis-color-rgb), .85);
 .btn-toggle[aria-expanded="true"]::before {
 transform: rotate(90deg);
 }
+
+.profile-square {
+  width: 25%;
+  padding-right:0;
+  padding-left:0;
+  position: relative;
+}
+
+.profile-square:after {
+  content: "";
+  display: block;
+  padding-bottom: 100%;
+}
+
+.inner {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}

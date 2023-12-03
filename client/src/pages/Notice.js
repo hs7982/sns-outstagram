@@ -8,16 +8,16 @@ const Notice = () => {
         <p class="fw-bold fs-4 d-flex flex-row mb-3">알림</p>
       </div>
 
-      <div>
-        <p class="fs-5 d-flew flew-row mb-3">오늘</p>
+      <div class="p-2">
+        오늘
       </div>
 
       <div class="p-3">
-        <img src="/g.png" class="object-fit-cover d-block w-10" alt="..." />
+        <img src="/3.jpg" class="object-fit-cover d-block w-10" alt="..." />
         홍길동 @gildong_hong 님이 프로필 사진을 변경했습니다.
         <Link>
           <div>
-            <button type="button" class="btn btn-secondary">
+            <button type="button" class="my-4 btn btn-secondary">
               프로필 보기
             </button>
           </div>
@@ -34,7 +34,7 @@ const Notice = () => {
       </div>
       <Link>
         <div>
-          <button type="button" class="btn btn-info">
+          <button type="button" class="btn btn-secondary">
             팔로우
           </button>
         </div>
