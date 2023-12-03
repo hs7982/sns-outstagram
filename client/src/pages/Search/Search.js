@@ -1,29 +1,34 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
 const Search = () => {
-  const [currSearch, setCurrSearch] = useState("post");
+  const [currSearch, setCurrSearch] = useState("게시물");
   const [keyword, setKeyword] = useState("");
   const [searchResult, setSearchResult] = useState([]);
   const [error, setError] = useState(null);
 
+  useEffect(() => {
+    performSearch()
+  }, [currSearch]);
+
   const currKeyword = () => {
     switch (currSearch) {
-      case "post":
+      case "게시물":
         return "/api/posts/search/" + keyword;
-      case "user":
+      case "사용자":
         return "/api/user/search/" + keyword;
-      case "tag":
-        return "api/posts/search/" + keyword;
-      case "place":
-        return "api/posts/search/" + keyword;
+      case "태그":
+        return "api/posts/tag/search/" + keyword;
+      case "장소":
+        return "api/posts/place/search/" + keyword;
       default:
         break;
     }
   };
 
   const performSearch = () => {
+    if(keyword !== "") {
     axios({
       url: currKeyword(),
       method: "GET",
@@ -44,6 +49,7 @@ const Search = () => {
         setError("검색 중 오류가 발생했습니다.");
         setSearchResult([]);
       });
+    }
   };
 
   const handleSubmit = (e) => {
@@ -73,7 +79,7 @@ const Search = () => {
         </form>
         <div className="my-3 container text-center">
           <div className="d-flex">
-            {["post", "tag", "user", "place"].map((searchType) => (
+            {["게시물", "사용자", "태그", "장소"].map((searchType) => (
               <div
                 key={searchType}
                 className={`flex-fill border-dark-subtle border-end ${
@@ -84,17 +90,14 @@ const Search = () => {
                   className="mx-auto text-dark text-decoration-none"
                   onClick={() => setCurrSearch(searchType)}
                 >
-                  {searchType === "post" && "게시물"}
-                  {searchType === "tag" && "태그"}
-                  {searchType === "user" && "사람"}
-                  {searchType === "place" && "장소"}
+                  {searchType}
                 </Link>
               </div>
             ))}
           </div>
         </div>
         <div>
-          <p className="text-start my-3 fw-bold">검색결과</p>
+          <p className="text-start my-3 fw-bold">{currSearch} 검색결과</p>
           {error && (
             <div className="alert alert-warning" role="alert">
               {error}

@@ -117,7 +117,7 @@ const getUserPost = (req, res) => {
         // Return success response
         return res.status(200).json(results);
       } else {
-        res.status(400).json("조회된 게시물이 없습니다.");
+        res.status(204).json("조회된 게시물이 없습니다.");
       }
     });
   } else {

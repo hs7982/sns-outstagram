@@ -53,9 +53,6 @@ const LeaveAccount = () => {
         >
           회원 탈퇴
         </button>
-        <Link to="/setting">
-          <p>돌아가기</p>
-        </Link>
       </div>
     </div>
   );

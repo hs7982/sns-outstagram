@@ -18,7 +18,7 @@ import LeaveAccount from "./pages/Setting/LeaveAccount";
 import WritePost from "./pages/WritePost";
 import Notice from "./pages/Notice";
 import FindPw from "./pages/FindPw";
-import Profile from "./pages/Profile";
+import Profile from "./pages/Profile/Profile";
 import Message from "./pages/Message";
 import Search from "./pages/Search/Search";
 import Admin from "./pages/Admin";

@@ -314,7 +314,6 @@ const getFollowerNum = (req, res) => {
         return res.status(500).json({ error: "Internal Server Error" });
       }
 
-      console.log(results[0].followCount);
       const followCount = results[0].followCount;
 
       // 팔로우 갯수를 클라이언트에게 반환
@@ -349,13 +348,58 @@ const followingNum = (req, res) => {
   }
 };
 
+//팔로워 목록 조회
+const getFollowerList = (req, res) => {
+  if (req.session.isLogin) {
+    const userId = Number(req.params.id);
+
+    const sql =
+      "SELECT user_id, followed_user_id, user_name, user_real_name, user_image FROM follows LEFT OUTER JOIN user ON follows.user_id = user.user_id_no WHERE follows.followed_user_id = ? ORDER BY follow_date DESC";
+    const values = [userId];
+
+    db.query(sql, values, (err, results) => {
+      if (err) {
+        console.error("Error executing SQL query:", err);
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
+
+      if (results.length > 0) return res.status(200).json(results);
+      else return res.status(204).json("팔로워가 없습니다.");
+    });
+  } else {
+    res.status(401).json({ error: "로그인이 필요합니다." });
+  }
+};
+
+// 팔로잉 목록 조회
+const followingList = (req, res) => {
+  if (req.session.isLogin) {
+    const userId = Number(req.params.id);
+
+    const sql = "SELECT user_id, followed_user_id, user_name, user_real_name, user_image FROM follows LEFT OUTER JOIN user ON follows.followed_user_id = user.user_id_no WHERE follows.user_id = ? ORDER BY follow_date DESC";
+    const values = [userId];
+
+    db.query(sql, values, (err, results) => {
+      if (err) {
+        console.error("Error executing SQL query:", err);
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
+
+      if (results.length > 0) return res.status(200).json(results);
+      else return res.status(204).json("팔로잉이 없습니다.");
+    });
+  } else {
+    res.status(401).json({ error: "로그인이 필요합니다." });
+  }
+};
+
 const isFollowing = (req, res) => {
   if (req.session.isLogin) {
     const userId = req.session.userIdNo;
     const followUserId = Number(req.params.id);
 
-    if(userId === followUserId){
-      return res.status(200).json(null); 
+    if (userId === followUserId) {
+      return res.status(200).json(null);
     }
 
     const sql =
@@ -389,6 +433,8 @@ module.exports = {
   getFollowerNum,
   followingNum,
   isFollowing,
+  getFollowerList,
+  followingList,
 
   changeProfileImg,
 };

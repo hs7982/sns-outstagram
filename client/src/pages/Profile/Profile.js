@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { UserContext } from "../components/UserContext";
+import { UserContext } from "../../components/UserContext";
+import FollowModal from "./FollowModal";
 import axios from "axios";
 
 const Profile = () => {
@@ -29,7 +30,7 @@ const Profile = () => {
         if (userResult.status === 200) {
           setIsNoUser(false);
           setUserData(userResult.data[0]);
-        } else if (followerResult.status === 204) {
+        } else if (userResult.status === 204) {
           setIsNoUser(true);
         }
 
@@ -137,7 +138,15 @@ const Profile = () => {
     }
   };
 
-  if (isErr) {
+  if (isNoUser) {
+    return (
+      <div className="fs-3 m-auto text-danger">
+        <i className="bi bi-exclamation-diamond"></i>
+        <br />
+        존재하지 않는 사용자입니다!
+      </div>
+    );
+  } else if (isErr) {
     return (
       <div className="fs-3 m-auto text-danger">
         <i className="bi bi-exclamation-diamond"></i>
@@ -172,14 +181,28 @@ const Profile = () => {
                 <div>0</div>
               </div>
 
-              <div class="col">
-                <div class="p-3 fs-4">팔로워 </div>
-                <div>{followerCount}</div>
+              <div
+                class="col"
+                data-bs-toggle="modal"
+                data-bs-target={`#follower`}
+              >
+                <Link className="text-decoration-none text-dark">
+                  <div class="p-3 fs-4">팔로워 </div>
+                  <div>{followerCount}</div>
+                </Link>
+                <FollowModal userId={userId} type={"follower"} count={followerCount}/>
               </div>
 
-              <div class="col">
-                <div class="p-3 fs-4">팔로잉 </div>
-                <div>{followingCount}</div>
+              <div
+                class="col"
+                data-bs-toggle="modal"
+                data-bs-target={`#following`}
+              >
+                <Link className="text-decoration-none text-dark">
+                  <div class="p-3 fs-4">팔로잉 </div>
+                  <div>{followingCount}</div>
+                </Link>
+                <FollowModal userId={userId} type={"following"} count={followingCount}/>
               </div>
             </div>
 
@@ -219,7 +242,9 @@ const Profile = () => {
                   <Link to={`/postView/${post.post_id}`}>
                     <div className="card h-100">
                       <img
-                        src={`/api/upload/${JSON.parse(post.post_image_url)[0]}`}
+                        src={`/api/upload/${
+                          JSON.parse(post.post_image_url)[0]
+                        }`}
                         className="inner d-block object-fit-cover rounded"
                         alt={`Post ${index + 1}`}
                       />
@@ -232,7 +257,6 @@ const Profile = () => {
         </div>
       </div>
     );
-  
 };
 
 export default Profile;

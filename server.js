@@ -63,13 +63,13 @@ app.use("/api/user", user);
 app.use("/api/posts", posts);
 app.use("/api/upload", express.static("./upload"));
 
-app.use("/api", api);
+app.use("/api/", api);
 
-const root = require('path').join(__dirname, 'client', 'build')
-app.use(express.static(root));
-app.get("*", (req, res) => {
-    res.sendFile('index.html', { root });
-})
+// const root = require('path').join(__dirname, 'client', 'build')
+// app.use(express.static(root));
+// app.get("*", (req, res) => {
+//     res.sendFile('index.html', { root });
+// })
 
 const port = process.env.PORT;
 app.listen(port, () => {
