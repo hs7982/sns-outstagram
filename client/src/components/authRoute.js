@@ -16,18 +16,23 @@ function Auth(SpecificComponent, option, adminRoute = null) {
         timeout: "10000",
       }).then((response) => {
         setLoading(false);
-
+    
         if (!response.data.isLogin) {
           if (option) {
             navigate("/login");
           }
         } else {
           if (adminRoute && !response.data.isAdmin) {
-            navigate(location.pathname);
+            navigate("/"); // 이 부분을 수정하여 다른 경로로 이동하도록 변경 가능
           } else {
-            if (!option) {
+            // 인증이 필요한 페이지에 접근할 때 해당 페이지로 유지
+            if (option && location.pathname === "/login") {
               navigate(location.pathname);
             }
+            // 추가적인 조건을 통해 다른 인증이 필요한 페이지 처리 가능
+            // else if (option && location.pathname === "/someOtherAuthPage") {
+            //   navigate(location.pathname);
+            // }
           }
         }
       });

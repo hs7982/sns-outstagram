@@ -197,14 +197,14 @@ const Home = () => {
   if (isEmptyPost)
     return (
       <div>
-        <div className="form-floating m-2" style={{ width: "12rem" }}>
+        <div className="form-floating m-2" style={{ width: "13rem" }}>
           <select
             value={feedType}
             className="form-select"
             onChange={(e) => setFeedType(e.target.value)}
           >
-            <option value="all">모든 게시물</option>
-            <option value="following">팔로우 중인 사람</option>
+            <option value="all">✨ 모든 게시물</option>
+            <option value="following">🙌 팔로우 중인 사람</option>
           </select>
           <label for="floatingSelect">피드 표시 방법</label>
         </div>
@@ -228,14 +228,14 @@ const Home = () => {
   else
     return (
       <div className="mt-2" id="content" style={{ whiteSpace: "pre-wrap" }}>
-        <div className="form-floating m-2" style={{ width: "12rem" }}>
+        <div className="form-floating m-2" style={{ width: "13rem" }}>
           <select
             value={feedType}
             className="form-select"
             onChange={(e) => setFeedType(e.target.value)}
           >
-            <option value="all">모든 게시물</option>
-            <option value="following">팔로우 중인 사람</option>
+            <option value="all">✨ 모든 게시물</option>
+            <option value="following">🙌 팔로우 중인 사람</option>
           </select>
           <label for="floatingSelect">피드 표시 방법</label>
         </div>

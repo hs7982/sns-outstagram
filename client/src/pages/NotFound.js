@@ -1,14 +1,15 @@
 import React from "react";
 
-const NotFound = () => {
+const NotFound = ({ changeNav }) => {
+  changeNav();
   return (
-    <div className="m-auto" style={{ width: "100%" }}>
-      <h1 className="mt-5">
-        <i class="bi bi-exclamation-diamond"></i>
-        <br />
-        페이지를 찾을 수 없습니다!
-      </h1>
+    <div className="mx-auto my-5">
+      <i class="bi bi-exclamation-diamond fs-1"></i>
+      <div className="mt-1 fs-2">페이지를 찾을 수 없습니다!</div>
       <p>404 Not Found</p>
+      <a href="/">
+        <button className="btn btn-primary my-4">홈으로</button>
+      </a>
     </div>
   );
 };

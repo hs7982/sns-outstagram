@@ -192,7 +192,7 @@ const Search = () => {
                       <div
                         key={message.user_name}
                         className="col p-3 border rounded m-1 overflow-y-auto"
-                        style={{ width: "230px", height: "210px" }}
+                        style={{ width: "230px", height: "200px" }}
                       >
                         <Link 
                           to={`/profile/${message.user_id_no}`}
@@ -206,8 +206,8 @@ const Search = () => {
                             alt=""
                           />                       
 
-                          <div className="mt-1">{message.user_name}</div>
-                          <div className="fst-italic">
+                          <div className="mt-1 fw-bold">{message.user_name}</div>
+                          <div>
                           {message.user_real_name}
                           </div>
                         </Link>

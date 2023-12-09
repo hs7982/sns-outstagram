@@ -68,10 +68,8 @@ function App() {
           <Route path="/findpw" element={<FindPw changeNav={changeNav} />} />
           <Route path="/setting" element={<Info />} />
 
-          <Route path="/message" element={<Message />} />
           <Route path="/setting/pwchange" element={<AuthPwChange />} />
           <Route path="/setting/infochange" element={<AuthInfoChange />} />
-          <Route path="/setting/tip" element={<Tip />} />
           <Route path="/logout" element={<AuthLogout />} />
           <Route path="/setting/tip/service" element={<AuthService />} />
           <Route path="/setting/leaveaccount" element={<AuthLeaveAccount />} />
@@ -84,7 +82,7 @@ function App() {
           <Route path="/postView/:postId" element={<AuthPostView />} />
 
           {/* **항상 최하단위치 여기 아래론 라우트 X** */}
-          <Route path="/*" element={<NotFound />} />
+          <Route path="/*" element={<NotFound changeNav={changeNav} />} />
         </Routes>
         </div>
       </main>

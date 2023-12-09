@@ -2,7 +2,9 @@ import React, { Fragment, useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { UserContext } from "../components/UserContext";
 
-const Navbar = ({ children }) => {
+const Navbar = () => {
+
+  
   const user = useContext(UserContext);
   const [isNavOpen, setNavOpen] = useState(false);
 

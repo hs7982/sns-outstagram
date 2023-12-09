@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
-export default function Singup( {changeNav} ) {
+export default function Singup({ changeNav }) {
   changeNav();
   const [name, setName] = useState("");
   const [userName, setUserName] = useState("");
@@ -40,9 +40,9 @@ export default function Singup( {changeNav} ) {
         })
           .then((result) => {
             if (result.status === 201) {
-              appendAlert(result.data, "info")
-              alert("계정 생성이 완료되었습니다. 로그인해주세요.")
-              window.open("/login", "_self")
+              appendAlert(result.data, "info");
+              alert("계정 생성이 완료되었습니다. 로그인해주세요.");
+              window.open("/login", "_self");
             }
           })
           .catch((error) => {
@@ -59,10 +59,10 @@ export default function Singup( {changeNav} ) {
   };
 
   return (
-    <div className="mt-5 container-xl">
+    <div className="mt-4 container-xl">
       {" "}
-      <h1 className="mb-5">OUTSTAGRAM 가입하기</h1>
-      <div className="form-floating my-2">
+      <h1 className="mb-4">OUTSTAGRAM 가입하기</h1>
+      <div className="form-floating my-3">
         <input
           type="text"
           className="form-control"
@@ -71,8 +71,11 @@ export default function Singup( {changeNav} ) {
           onChange={(e) => setName(e.target.value)}
         ></input>
         <label htmlFor="floatingInput">성명 (ex: 홍길동)</label>
+        <div className="form-text text-start ms-2">
+          실명은 2자 이상이어야 하며 한글과 영어만 허용됩니다.
+        </div>
       </div>
-      <div className="form-floating my-2">
+      <div className="form-floating my-3">
         <input
           type="text"
           className="form-control"
@@ -81,8 +84,12 @@ export default function Singup( {changeNav} ) {
           onChange={(e) => setUserName(e.target.value)}
         ></input>
         <label htmlFor="floatingInput">사용자 이름(계정명)</label>
+        <div className="form-text text-start ms-2">
+          사용자 이름은 3자이상 이여야하며, 영어와 숫자, 일부 특수문자(-, _,
+          .)만 허용됩니다. )
+        </div>
       </div>
-      <div className="form-floating my-2">
+      <div className="form-floating my-3">
         <input
           type="tel"
           className="form-control"
@@ -92,7 +99,7 @@ export default function Singup( {changeNav} ) {
         ></input>
         <label htmlFor="floatingInput">전화번호</label>
       </div>
-      <div className="form-floating my-2">
+      <div className="form-floating my-3">
         <input
           type="email"
           className="form-control"
@@ -102,7 +109,7 @@ export default function Singup( {changeNav} ) {
         ></input>
         <label htmlFor="floatingInput">이메일</label>
       </div>
-      <div className="form-floating my-2">
+      <div className="form-floating my-3">
         <input
           type="password"
           className="form-control"
@@ -111,8 +118,12 @@ export default function Singup( {changeNav} ) {
           onChange={(e) => setPassword(e.target.value)}
         ></input>
         <label htmlFor="floatingInput">비밀번호</label>
+        <div className="form-text text-start ms-2">
+          비밀번호는 최소 6자 이상이어야 하며, 영어, 숫자, 특수문자를 반드시
+          포함해야 합니다.
+        </div>
       </div>
-      <div className="form-floating my-2">
+      <div className="form-floating my-3">
         <input
           type="password"
           className="form-control"
@@ -135,7 +146,10 @@ export default function Singup( {changeNav} ) {
         </div>
         <div>
           <p>
-            계정이 있으신가요? <Link to="/login" className="text-decoration-none">로그인</Link>
+            계정이 있으신가요?{" "}
+            <Link to="/login" className="text-decoration-none">
+              로그인
+            </Link>
           </p>
         </div>
       </div>
