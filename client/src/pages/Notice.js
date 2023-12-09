@@ -10,7 +10,7 @@ const Notice = () => {
 
       <div>
         <p className="fs-4">오늘</p>
-        <div className="d-flex w-100">
+        <div className="d-flex flex-wrap w-100">
           <img
             src="/api/upload/profile/e0dbda74-644c-4c42-b190-b2b0656cf8ab.png"
             width="75"
@@ -35,12 +35,12 @@ const Notice = () => {
 
       <div>
         <p className="fs-4">어제</p>
-        <div className="d-flex w-100">
+        <div className="d-flex flex-wrap w-100">
           <img
             src="/api/upload/profile/e0dbda74-644c-4c42-b190-b2b0656cf8ab.png"
             width="75"
             height="75"
-            className="rounded-circle bg-secondary-subtle object-fit-cover border"
+            className="rounded-circle bg-secondary-subtle object-fit-cover border "
             alt="..."
           />
           <div className="flex-fill my-auto">
@@ -54,7 +54,7 @@ const Notice = () => {
             </button>
           </Link>
         </div>
-        <div className="d-flex w-100 mt-4">
+        <div className="d-flex flex-wrap w-100 mt-4">
           <img
             src="/api/upload/profile/e0dbda74-644c-4c42-b190-b2b0656cf8ab.png"
             width="75"
@@ -78,7 +78,7 @@ const Notice = () => {
 
         <div>
           <p className="fs-4">일주일 전</p>
-          <div className="d-flex w-100">
+          <div className="d-flex flex-wrap w-100">
             <img
               src="/api/upload/profile/e0dbda74-644c-4c42-b190-b2b0656cf8ab.png"
               width="75"

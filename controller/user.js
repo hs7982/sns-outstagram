@@ -420,6 +420,25 @@ const isFollowing = (req, res) => {
   }
 };
 
+//검색에서 사용자 검색해서 조회하기
+const searchUser = (req, res) => {
+  const keyword = "%" + req.params.keyword + "%";
+  db.query(
+    "SELECT * FROM `outstagram`.`user` WHERE user_name LIKE ? OR user_real_name LIKE ?",
+    [keyword, keyword],
+    (err, results) => {
+      if (err) {
+        res.status(500).json("서버에러입니다.");
+        console.log(err);
+      }
+      if (results.length > 0) {
+        res.status(200).json(results);
+      } else {
+        res.status(204).json("조회된 사용자가 없습니다.");
+      }
+    }
+  );
+};
 
 
 module.exports = {
@@ -437,6 +456,7 @@ module.exports = {
   isFollowing,
   getFollowerList,
   followingList,
+  searchUser,
   
   changeProfileImg,
 };

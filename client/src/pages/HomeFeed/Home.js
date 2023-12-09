@@ -9,12 +9,20 @@ const Home = () => {
   const [isError, setError] = useState(false);
   const [likeStatus, setLikeStatus] = useState({});
   const [likeCount, setLikeCount] = useState({});
+  const [feedType, setFeedType] = useState("all");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        let url = "";
+        if (feedType === "all") {
+          url = "/api/posts/feed";
+        } else if (feedType === "following") {
+          url = "/api/posts/followFeed";
+        }
+
         const result = await axios({
-          url: "/api/posts/feed",
+          url: url,
           method: "GET",
           withCredentials: true,
           timeout: 5000,
@@ -23,6 +31,7 @@ const Home = () => {
         if (result.status === 204) {
           setEmptyPost(true);
         } else {
+          setEmptyPost(false)
           setPostData(result.data);
           // 각 게시물에 대한 초기 좋아요 상태를 가져옴
           for (const post of result.data) {
@@ -45,7 +54,7 @@ const Home = () => {
     };
 
     fetchData();
-  }, []);
+  }, [feedType]);
 
   const likeClick = (postId, liked) => {
     let methods = "";
@@ -187,12 +196,25 @@ const Home = () => {
 
   if (isEmptyPost)
     return (
-      <div className="fs-3 m-auto">
-        <i className="bi bi-exclamation-diamond"></i>
-        <br />
-        표시할 게시물이 없습니다.
-        <br />
-        새로운 글을 업로드해보세요!
+      <div>
+        <div className="form-floating m-2" style={{ width: "12rem" }}>
+          <select
+            value={feedType}
+            className="form-select"
+            onChange={(e) => setFeedType(e.target.value)}
+          >
+            <option value="all">모든 게시물</option>
+            <option value="following">팔로우 중인 사람</option>
+          </select>
+          <label for="floatingSelect">피드 표시 방법</label>
+        </div>
+        <div className="fs-3 m-auto">
+          <i className="bi bi-exclamation-diamond"></i>
+          <br />
+          표시할 게시물이 없습니다.
+          <br />
+          새로운 글을 업로드해보세요!
+        </div>
       </div>
     );
   else if (isError)
@@ -206,6 +228,17 @@ const Home = () => {
   else
     return (
       <div className="mt-2" id="content" style={{ whiteSpace: "pre-wrap" }}>
+        <div className="form-floating m-2" style={{ width: "12rem" }}>
+          <select
+            value={feedType}
+            className="form-select"
+            onChange={(e) => setFeedType(e.target.value)}
+          >
+            <option value="all">모든 게시물</option>
+            <option value="following">팔로우 중인 사람</option>
+          </select>
+          <label for="floatingSelect">피드 표시 방법</label>
+        </div>
         {postData.map((post, index) => {
           const imageUrls = parseImageUrls(post.post_image_url);
           const imageUrlArray = Object.values(imageUrls[0]); // Convert object values to array

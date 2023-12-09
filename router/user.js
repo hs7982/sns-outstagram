@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../database/db");
 
-const { login, logout, singup, getmyinfo, pwChange, leaveId, getUserInfo, changeProfileImg, followUser, unfollowUser,getFollowerNum,followingNum, isFollowing, getFollowerList, followingList, searchComment  } = require("../controller/user");
+const { login, logout, singup, getmyinfo, pwChange, leaveId, getUserInfo, changeProfileImg, followUser, unfollowUser,getFollowerNum,followingNum, isFollowing, getFollowerList, followingList, searchComment, searchUser  } = require("../controller/user");
 
 
 
@@ -34,6 +34,7 @@ router.get('/followingNum/:id', followingNum);
 router.get('/followerList/:id', getFollowerList);
 router.get('/followingList/:id', followingList);
 
+router.get('/searchUser/:keyword', searchUser);
 
 
 module.exports = router;

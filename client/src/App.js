@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
-import Home from "./pages/Home";
+import Home from "./pages/HomeFeed/Home";
 import NotFound from "./pages/NotFound";
 import "./App.css";
 import Singup from "./pages/Singup";
@@ -22,7 +22,7 @@ import Profile from "./pages/Profile/Profile";
 import Message from "./pages/Message";
 import Search from "./pages/Search/Search";
 import Admin from "./pages/Admin";
-import PostView from "./pages/PostView";
+import PostView from "./pages/HomeFeed/PostView";
 
 
 function App() {
