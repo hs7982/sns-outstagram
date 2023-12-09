@@ -3,56 +3,102 @@ import { Link } from "react-router-dom";
 
 const Notice = () => {
   return (
-    <div class="container px-4 text-center overflow-auto">
+    <div class="container px-4 mt-3 text-center overflow-auto">
       <div>
         <p class="fw-bold fs-4 d-flex flex-row mb-3">알림</p>
       </div>
 
-      <div class="p-2">
-        오늘
-      </div>
-
-      <div class="p-3">
-        <img src="/3.jpg" class="object-fit-cover d-block w-10" alt="..." />
-        홍길동 @gildong_hong 님이 프로필 사진을 변경했습니다.
-        <Link>
-          <div>
-            <button type="button" class="my-4 btn btn-secondary">
+      <div>
+        <p className="fs-4">오늘</p>
+        <div className="d-flex w-100">
+          <img
+            src="/api/upload/profile/e0dbda74-644c-4c42-b190-b2b0656cf8ab.png"
+            width="75"
+            height="75"
+            className="rounded-circle bg-secondary-subtle object-fit-cover border"
+            alt="..."
+          />
+          <div className="flex-fill my-auto">
+            <div class="ms-4 text-start">
+              <b>홍길동 @gildong_hong</b> 님이 프로필 사진을 변경했습니다.
+            </div>
+          </div>
+          <Link className="my-auto">
+            <button type="button" class="btn btn-secondary">
               프로필 보기
             </button>
-          </div>
-        </Link>
-      </div>
-      <div class="d-flex flex-column mb-3">
-        <hr></hr>
+          </Link>
+        </div>
       </div>
 
-      <div class="p-2">어제</div>
-      <div class="p-3">
-        <img src="/seo.png" class="object-fit-cover d-block w-20" alt="..." />
-        서장원 @jangwon_seo 님이 팔로우를 요청하였습니다.
-      </div>
-      <Link>
-        <div>
-          <button type="button" class="btn btn-secondary">
-            팔로우
-          </button>
-        </div>
-      </Link>
       <hr></hr>
 
-      <div class="p-2">
-        일주일 전
-        <img src="/new.png" class="object-fit-cover d-block w-20" alt="..." />
-        <div class="p-3">
-          뉴진스 @newjeans_official 님이 게시물을 올렸습니다
+      <div>
+        <p className="fs-4">어제</p>
+        <div className="d-flex w-100">
+          <img
+            src="/api/upload/profile/e0dbda74-644c-4c42-b190-b2b0656cf8ab.png"
+            width="75"
+            height="75"
+            className="rounded-circle bg-secondary-subtle object-fit-cover border"
+            alt="..."
+          />
+          <div className="flex-fill my-auto">
+            <div class="ms-4 text-start">
+              <b>서장원 @jangwon_seo</b> 님이 팔로우를 요청하였습니다.
+            </div>
+          </div>
+          <Link className="my-auto">
+            <button type="button" class="btn btn-secondary">
+              수락
+            </button>
+          </Link>
         </div>
-        <Link>
-          <button type="button" class="btn btn-secondary">
-            게시물 보기
-          </button>
-        </Link>
+        <div className="d-flex w-100 mt-4">
+          <img
+            src="/api/upload/profile/e0dbda74-644c-4c42-b190-b2b0656cf8ab.png"
+            width="75"
+            height="75"
+            className="rounded-circle bg-secondary-subtle object-fit-cover border"
+            alt="..."
+          />
+          <div className="flex-fill my-auto">
+            <div class="ms-4 text-start">
+              <b>홍길동 @gildong_hong</b> 님이 팔로우 하였습니다.
+            </div>
+          </div>
+          <Link className="my-auto">
+            <button type="button" class="btn btn-secondary">
+              맞팔로우
+            </button>
+          </Link>
+        </div>
+
         <hr></hr>
+
+        <div>
+          <p className="fs-4">일주일 전</p>
+          <div className="d-flex w-100">
+            <img
+              src="/api/upload/profile/e0dbda74-644c-4c42-b190-b2b0656cf8ab.png"
+              width="75"
+              height="75"
+              className="rounded-circle bg-secondary-subtle object-fit-cover border"
+              alt="..."
+            />
+            <div className="flex-fill my-auto">
+              <div class="ms-4 text-start">
+                <b>뉴진스 @newjeans_official</b> 님이 게시물을 올렸습니다
+              </div>
+            </div>
+            <Link className="my-auto">
+              <button type="button" class="btn btn-secondary">
+                게시물 보기
+              </button>
+            </Link>
+          </div>
+          <hr></hr>
+        </div>
       </div>
     </div>
   );
