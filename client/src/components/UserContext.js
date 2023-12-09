@@ -1,10 +1,10 @@
-import React, { createContext, useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { createContext, useState, useEffect } from "react";
+import axios from "axios";
 
 export const UserContext = createContext(null);
 
 export function UserProvider({ children }) {
-  const [user, setUser] = useState({isLogin:false,userName:null});
+  const [user, setUser] = useState({ isLogin: false, userName: null });
 
   useEffect(() => {
     axios({
@@ -13,14 +13,14 @@ export function UserProvider({ children }) {
       withCredentials: true,
       timeout: 5000,
     }).then((response) => {
-    setUser(response.data);
-    localStorage.setItem('user', JSON.stringify(response.data));
-    })
+      setUser(response.data);
+      localStorage.setItem("user", JSON.stringify(response.data));
+    });
   }, []);
 
   const login = (userData) => {
     setUser(userData);
-    localStorage.setItem('user', JSON.stringify(userData));
+    localStorage.setItem("user", JSON.stringify(userData));
   };
 
   const logout = () => {
@@ -29,15 +29,16 @@ export function UserProvider({ children }) {
       method: "POST",
       withCredentials: true,
       timeout: "5000",
-    }).then((response) => {
-      setUser({isLogin:false,userName:null});
-      localStorage.removeItem('user');
-      window.open("/", "_self");
-      alert('로그아웃되었습니다.')
-    }).catch((error) => {
-      alert('로그아웃 실패' + error.data );
     })
-
+      .then((response) => {
+        setUser({ isLogin: false, userName: null });
+        localStorage.removeItem("user");
+        window.open("/", "_self");
+        alert("로그아웃되었습니다.");
+      })
+      .catch((error) => {
+        alert("로그아웃 실패" + error.data);
+      });
   };
 
   return (

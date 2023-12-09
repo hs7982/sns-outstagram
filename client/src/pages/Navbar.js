@@ -3,8 +3,6 @@ import { Link } from "react-router-dom";
 import { UserContext } from "../components/UserContext";
 
 const Navbar = () => {
-
-  
   const user = useContext(UserContext);
   const [isNavOpen, setNavOpen] = useState(false);
 
@@ -14,7 +12,7 @@ const Navbar = () => {
 
   const closeNav = () => {
     setNavOpen(false);
-  }
+  };
 
   return (
     <Fragment>
@@ -22,7 +20,7 @@ const Navbar = () => {
       <div
         className="d-md-none position-fixed w-100 bg-light shadow d-flex"
         id="mobile-header"
-        style={{ zIndex: 1000}}
+        style={{ zIndex: 1000 }}
       >
         <button
           className="navbar-toggler border rounded m-2" // d-md-none 클래스 추가
@@ -49,7 +47,10 @@ const Navbar = () => {
         <Link to="/" className="ms-2 my-auto text-dark text-decoration-none">
           <h1
             className="h1 mt-2 text-center my-auto"
-            style={{ fontFamily: "Just Another Hand, cursive", fontSize:"2rem"}}
+            style={{
+              fontFamily: "Just Another Hand, cursive",
+              fontSize: "2rem",
+            }}
           >
             OUTSTAGRAM
           </h1>
@@ -80,7 +81,7 @@ const Navbar = () => {
               className="nav-link text-dark text-decoration-none mb-3 text-start"
               aria-current="page"
               to="/"
-              onClick={()=>closeNav()}
+              onClick={() => closeNav()}
             >
               <i
                 className="bi bi-house-door me-2"
@@ -93,7 +94,7 @@ const Navbar = () => {
             <Link
               className="nav-link text-dark text-decoration-none mb-3 text-start"
               to="/search"
-              onClick={()=>closeNav()}
+              onClick={() => closeNav()}
             >
               <i
                 className="bi bi-search me-2"
@@ -106,7 +107,7 @@ const Navbar = () => {
             <Link
               className="nav-link  text-dark text-decoration-none mb-3 text-start"
               to="/notice"
-              onClick={()=>closeNav()}
+              onClick={() => closeNav()}
             >
               <i className="bi bi-bell me-2" style={{ fontSize: "1.5rem" }}></i>{" "}
               알림
@@ -116,7 +117,7 @@ const Navbar = () => {
             <Link
               className="nav-link  text-dark text-decoration-none mb-3 text-start"
               to="/profile"
-              onClick={()=>closeNav()}
+              onClick={() => closeNav()}
             >
               <i
                 className="bi bi-person me-2"
@@ -129,7 +130,7 @@ const Navbar = () => {
             <Link
               className="nav-link  text-dark text-decoration-none mb-3 text-start"
               to="/writepost"
-              onClick={()=>closeNav()}
+              onClick={() => closeNav()}
             >
               <i
                 className="bi bi-plus-circle me-2"
@@ -142,7 +143,7 @@ const Navbar = () => {
             <Link
               className="nav-link  text-dark text-decoration-none mb-3 text-start"
               to="/setting"
-              onClick={()=>closeNav()}
+              onClick={() => closeNav()}
             >
               <i className="bi bi-gear me-2" style={{ fontSize: "1.5rem" }}></i>{" "}
               설정
@@ -150,9 +151,8 @@ const Navbar = () => {
           </li>
         </ul>
 
-
         <div className="dropdown ms-2">
-        <hr />
+          <hr />
           <Link
             href="#"
             className="d-flex align-items-center text-black text-decoration-none dropdown-toggle"
@@ -170,7 +170,11 @@ const Navbar = () => {
           </Link>
           <ul className="dropdown-menu dropdown-menu text-small shadow">
             <li>
-              <Link className="dropdown-item" to="/logout" onClick={()=>closeNav()}>
+              <Link
+                className="dropdown-item"
+                to="/logout"
+                onClick={() => closeNav()}
+              >
                 로그아웃
               </Link>
             </li>

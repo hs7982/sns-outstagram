@@ -84,24 +84,35 @@ const singup = (req, res) => {
   const passwordRegex = /^(?=.*[\d@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/; // 비밀번호 유효성 검사를 위한 정규 표현식
 
   if (!nameRegex.test(name) || name.length < 2) {
-    return res.status(400).json("실명은 2자 이상이어야 하며 한글과 영어만 허용됩니다.");
+    return res
+      .status(400)
+      .json("실명은 2자 이상이어야 하며 한글과 영어만 허용됩니다.");
   }
 
   if (!usernameRegex.test(userName) || userName.length < 3) {
-    return res.status(400).json("사용자 이름이 3자 미만이거나 허용되지 않는 문자가 포함되어 있습니다. (허용문자: 영어 알파벳, 숫자, -, _, .)");
+    return res
+      .status(400)
+      .json(
+        "사용자 이름이 3자 미만이거나 허용되지 않는 문자가 포함되어 있습니다. (허용문자: 영어 알파벳, 숫자, -, _, .)"
+      );
   }
 
   if (!telRegex.test(tel)) {
-    return res.status(400).json("전화번호는 숫자와 대시(-)만 입력할 수 있습니다.");
+    return res
+      .status(400)
+      .json("전화번호는 숫자와 대시(-)만 입력할 수 있습니다.");
   }
 
   if (!emailRegex.test(email)) {
     return res.status(400).json("올바른 이메일 형식이 아닙니다.");
   }
 
-
   if (!passwordRegex.test(password)) {
-    return res.status(400).json("비밀번호는 최소 6자 이상이어야 하며, 영어, 숫자, 특수문자를 반드시 포함해야 합니다.");
+    return res
+      .status(400)
+      .json(
+        "비밀번호는 최소 6자 이상이어야 하며, 영어, 숫자, 특수문자를 반드시 포함해야 합니다."
+      );
   }
 
   db.query(

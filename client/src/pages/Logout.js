@@ -25,10 +25,9 @@ const Logout = () => {
       </button>
 
       <Link to="/setting">
-      <div>돌아가기</div>
+        <div>돌아가기</div>
       </Link>
     </div>
-     
   );
 };
 

@@ -1,9 +1,11 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import LikeList from "./LikeList";
+import { UserContext } from "../../components/UserContext";
 
 const Home = () => {
+  const user = useContext(UserContext);
   const [postData, setPostData] = useState([]);
   const [isEmptyPost, setEmptyPost] = useState(false);
   const [isError, setError] = useState(false);
@@ -31,7 +33,7 @@ const Home = () => {
         if (result.status === 204) {
           setEmptyPost(true);
         } else {
-          setEmptyPost(false)
+          setEmptyPost(false);
           setPostData(result.data);
           // 각 게시물에 대한 초기 좋아요 상태를 가져옴
           for (const post of result.data) {
@@ -287,21 +289,29 @@ const Home = () => {
                         <i className="bi bi-person-circle"></i> 프로필 보기
                       </Link>
                     </li>
-                    <li>
-                      <Link className="dropdown-item" to="">
-                        <i className="bi bi-pencil-square"></i> 수정
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        className="dropdown-item"
-                        onClick={() => deletePost(post.post_id)}
-                      >
-                        <span className="text-danger">
-                          <i className="bi bi-trash"></i> 게시물 삭제
-                        </span>
-                      </Link>
-                    </li>
+                    {post.post_user_id === user.user.userIdNo ? (
+                      <li>
+                        <Link className="dropdown-item" to="">
+                          <i className="bi bi-pencil-square"></i> 수정
+                        </Link>
+                      </li>
+                    ) : (
+                      ""
+                    )}
+                    {post.post_user_id === user.user.userIdNo ? (
+                      <li>
+                        <Link
+                          className="dropdown-item"
+                          onClick={() => deletePost(post.post_id)}
+                        >
+                          <span className="text-danger">
+                            <i className="bi bi-trash"></i> 게시물 삭제
+                          </span>
+                        </Link>
+                      </li>
+                    ) : (
+                      ""
+                    )}
                     <li>
                       <Link className="dropdown-item" to="">
                         <i className="bi bi-flag"></i> 이 게시물 신고하기

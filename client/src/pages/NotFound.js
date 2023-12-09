@@ -4,7 +4,7 @@ const NotFound = ({ changeNav }) => {
   changeNav();
   return (
     <div className="mx-auto my-5">
-      <i class="bi bi-exclamation-diamond fs-1"></i>
+      <i className="bi bi-exclamation-diamond fs-1"></i>
       <div className="mt-1 fs-2">페이지를 찾을 수 없습니다!</div>
       <p>404 Not Found</p>
       <a href="/">

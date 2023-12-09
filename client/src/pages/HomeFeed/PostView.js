@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { Link, useParams } from "react-router-dom";
 import LikeList from "./LikeList";
+import { UserContext } from "../../components/UserContext";
 
 const PostView = () => {
+  const user = useContext(UserContext);
   const params = useParams();
   const [postData, setPostData] = useState([]);
   const [isError, setError] = useState(false);
@@ -290,21 +292,29 @@ const PostView = () => {
                           <i className="bi bi-person-circle"></i> 프로필 보기
                         </Link>
                       </li>
-                      <li>
-                        <Link className="dropdown-item" to="">
-                          <i className="bi bi-pencil-square"></i> 수정
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          className="dropdown-item"
-                          onClick={() => deletePost(post.post_id)}
-                        >
-                          <span className="text-danger">
-                            <i className="bi bi-trash"></i> 게시물 삭제
-                          </span>
-                        </Link>
-                      </li>
+                      {post.post_user_id === user.user.userIdNo ? (
+                        <li>
+                          <Link className="dropdown-item" to="">
+                            <i className="bi bi-pencil-square"></i> 수정
+                          </Link>
+                        </li>
+                      ) : (
+                        ""
+                      )}
+                      {post.post_user_id === user.user.userIdNo ? (
+                        <li>
+                          <Link
+                            className="dropdown-item"
+                            onClick={() => deletePost(post.post_id)}
+                          >
+                            <span className="text-danger">
+                              <i className="bi bi-trash"></i> 게시물 삭제
+                            </span>
+                          </Link>
+                        </li>
+                      ) : (
+                        ""
+                      )}
                       <li>
                         <Link className="dropdown-item" to="">
                           <i className="bi bi-flag"></i> 이 게시물 신고하기

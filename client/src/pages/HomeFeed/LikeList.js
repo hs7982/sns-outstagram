@@ -100,10 +100,16 @@ const LikeList = ({ postId, count }) => {
                       <div className="fw-bold">{user.user_name}</div>
                       <small>{user.user_real_name}</small>
                     </div>
-                    <Link to={"/profile/"+user.like_user_id} className="ms-auto my-auto">
-                    <button className="btn btn-primary btn-sm" data-bs-dismiss="modal">
-                      프로필보기
-                    </button>
+                    <Link
+                      to={"/profile/" + user.like_user_id}
+                      className="ms-auto my-auto"
+                    >
+                      <button
+                        className="btn btn-primary btn-sm"
+                        data-bs-dismiss="modal"
+                      >
+                        프로필보기
+                      </button>
                     </Link>
                   </div>
                 </li>

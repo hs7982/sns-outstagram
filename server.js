@@ -4,14 +4,12 @@ const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const sessiondb = require("express-mysql-session")(session);
 const db = require("./database/db");
-const path = require('path');
+const path = require("path");
 
 const app = express();
 const api = require("./router/api");
 const user = require("./router/user");
 const posts = require("./router/posts");
-
-
 
 dotenv.config();
 
@@ -56,8 +54,6 @@ app.use((err, req, res, next) => {
   console.log(err.toString());
   res.send(err.toString());
 });
-
-
 
 app.use("/api/user", user);
 app.use("/api/posts", posts);

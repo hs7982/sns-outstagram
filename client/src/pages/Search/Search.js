@@ -155,7 +155,10 @@ const Search = () => {
 
               {currSearch === "댓글" ? (
                 <div className="container">
-                  <div className="row row-cols-4 justify-content-center" id="result">
+                  <div
+                    className="row row-cols-4 justify-content-center"
+                    id="result"
+                  >
                     {searchResult.map((message) => (
                       <div
                         key={message.comment_content}
@@ -187,36 +190,38 @@ const Search = () => {
 
               {currSearch === "사용자" ? (
                 <div className="container">
-                  <div className="row row-cols-4 justify-content-center" id="result">
+                  <div
+                    className="row row-cols-4 justify-content-center"
+                    id="result"
+                  >
                     {searchResult.map((message) => (
                       <div
                         key={message.user_name}
                         className="col p-3 border rounded m-1 overflow-y-auto"
                         style={{ width: "230px", height: "200px" }}
                       >
-                        <Link 
+                        <Link
                           to={`/profile/${message.user_id_no}`}
                           className="text-decoration-none text-dark"
-                          >
-                        <img
+                        >
+                          <img
                             src={`/api/upload/profile/${message.user_image}`}
                             width="100"
                             height="100"
                             className="rounded-circle bg-secondary-subtle object-fit-cover border"
                             alt=""
-                          />                       
+                          />
 
-                          <div className="mt-1 fw-bold">{message.user_name}</div>
-                          <div>
-                          {message.user_real_name}
+                          <div className="mt-1 fw-bold">
+                            {message.user_name}
                           </div>
+                          <div>{message.user_real_name}</div>
                         </Link>
                       </div>
                     ))}
                   </div>
                 </div>
               ) : null}
-
             </Fragment>
           )}
         </div>

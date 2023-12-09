@@ -427,5 +427,5 @@ module.exports = {
   postReport,
   getLikeList,
   getUserPost,
-  searchComment
+  searchComment,
 };

@@ -4,21 +4,18 @@ import { Link } from "react-router-dom";
 const activeClass = (btn) => {
   const path = window.location.pathname;
   const active = "list-group-item list-group-item-action active";
-  const disabled = "list-group-item list-group-item-action"
-  if(btn===path) return active;
+  const disabled = "list-group-item list-group-item-action";
+  if (btn === path) return active;
   else return disabled;
-}
+};
 
 const SettingNav = () => {
   return (
-    <div className="m-3" style={{ width: "350px"}}>
+    <div className="m-3" style={{ width: "350px" }}>
       <div className="list-group mx-auto">
         <p className="fs-3 text-start">설정</p>
         <Link to="/setting" className="text-dark text-decoration-none">
-          <button
-            type="button"
-            className={activeClass("/setting")}
-          >
+          <button type="button" className={activeClass("/setting")}>
             소개
           </button>
         </Link>
@@ -47,7 +44,10 @@ const SettingNav = () => {
           to="/setting/leaveaccount"
           className="text-dark text-decoration-none"
         >
-          <button type="button" className={activeClass("/setting/leaveaccount")}>
+          <button
+            type="button"
+            className={activeClass("/setting/leaveaccount")}
+          >
             계정탈퇴
           </button>
         </Link>

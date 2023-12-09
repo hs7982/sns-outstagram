@@ -156,12 +156,12 @@ const Profile = () => {
     );
   } else
     return (
-      <div class="m-3 text-center">
+      <div className="m-3 text-center">
         <div>
-          <p class="fw-bold fs-3 text-start mb-3">프로필</p>
+          <p className="fw-bold fs-3 text-start mb-3">프로필</p>
         </div>
         <div className="d-flex flex-wrap">
-          <div class="p-5 mx-auto">
+          <div className="p-5 mx-auto">
             <img
               src={"/api/upload/profile/" + userData.user_image}
               alt=""
@@ -174,35 +174,43 @@ const Profile = () => {
             <p>{userData.user_real_name}</p>
           </div>
 
-          <div class="d-flex flex-column align-self-center text-center flex-fill px-auto">
-            <div class="d-flex justify-content-between mb-4">
-              <div class="col">
-                <div class="p-3 fs-4">게시물</div>
+          <div className="d-flex flex-column align-self-center text-center flex-fill px-auto">
+            <div className="d-flex justify-content-between mb-4">
+              <div className="col">
+                <div className="p-3 fs-4">게시물</div>
                 <div>0</div>
               </div>
 
               <div
-                class="col"
+                className="col"
                 data-bs-toggle="modal"
                 data-bs-target={`#follower`}
               >
                 <Link className="text-decoration-none text-dark">
-                  <div class="p-3 fs-4">팔로워 </div>
+                  <div className="p-3 fs-4">팔로워 </div>
                   <div>{followerCount}</div>
                 </Link>
-                <FollowModal userId={userId} type={"follower"} count={followerCount}/>
+                <FollowModal
+                  userId={userId}
+                  type={"follower"}
+                  count={followerCount}
+                />
               </div>
 
               <div
-                class="col"
+                className="col"
                 data-bs-toggle="modal"
                 data-bs-target={`#following`}
               >
                 <Link className="text-decoration-none text-dark">
-                  <div class="p-3 fs-4">팔로잉 </div>
+                  <div className="p-3 fs-4">팔로잉 </div>
                   <div>{followingCount}</div>
                 </Link>
-                <FollowModal userId={userId} type={"following"} count={followingCount}/>
+                <FollowModal
+                  userId={userId}
+                  type={"following"}
+                  count={followingCount}
+                />
               </div>
             </div>
 

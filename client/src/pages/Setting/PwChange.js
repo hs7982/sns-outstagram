@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import SettingNav from "./SettingNav";
 import axios from "axios";
@@ -11,13 +11,12 @@ const PwChange = () => {
   const appendAlert = (message, type) => {
     const alertPlaceholder = document.getElementById("liveAlertPlaceholder");
     alertPlaceholder.innerHTML = [
-      `<div class="alert alert-${type} alert-dismissible fade show" role="alert">`,
-      `   <div><i class="bi bi-exclamation-triangle-fill"></i> ${message}</div>`,
-      '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+      `<div className="alert alert-${type} alert-dismissible fade show" role="alert">`,
+      `   <div><i className="bi bi-exclamation-triangle-fill"></i> ${message}</div>`,
+      '   <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
       "</div>",
     ].join("");
   };
-
 
   const pwChangeProcess = (event) => {
     event.preventDefault();
@@ -30,12 +29,12 @@ const PwChange = () => {
         data: {
           oriPassword: oriPassword,
           newPassword: newPassword,
-          reNewPassword : reNewPassword
+          reNewPassword: reNewPassword,
         },
       })
         .then((result) => {
           if (result.status === 200) {
-            console.log(result.data)
+            console.log(result.data);
             appendAlert(result.data, "info");
           } else if (result.status === 403) {
             appendAlert("아이디와 비밀번호가 일치하지 않습니다.", "warning");
@@ -49,11 +48,10 @@ const PwChange = () => {
     } else {
       appendAlert("아이디와 비밀번호를 입력해주세요", "warning");
     }
-  }
-
+  };
 
   return (
-    <div className="d-flex flex-wrap" style={{width:'100%'}}>
+    <div className="d-flex flex-wrap" style={{ width: "100%" }}>
       <SettingNav />
       <div className="m-5 mx-auto">
         <div className="fs-3">비밀번호 변경</div>
@@ -94,7 +92,11 @@ const PwChange = () => {
         </Link>
         <div id="liveAlertPlaceholder"></div>
         <Link>
-          <button type="button" className="btn btn-primary" onClick={pwChangeProcess}>
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={pwChangeProcess}
+          >
             비밀번호 변경
           </button>
         </Link>

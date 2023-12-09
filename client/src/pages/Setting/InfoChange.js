@@ -1,5 +1,4 @@
 import React, { useContext, useState } from "react";
-import { Link } from "react-router-dom";
 import { UserContext } from "../../components/UserContext";
 import SettingNav from "./SettingNav";
 import axios from "axios";
@@ -28,13 +27,17 @@ const InfoChange = () => {
 
     try {
       // 서버에 POST 요청 보내기
-      const response = await axios.post("/api/user/changeProfileImg", formData, {
-        method: "POST",
-        headers: {
-          "Content-Type": "multipart/form-data",
+      const response = await axios.post(
+        "/api/user/changeProfileImg",
+        formData,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         }
-      });
-      console.log(response)
+      );
+      console.log(response);
 
       if (response.status === 200) {
         alert("프로필 사진이 성공적으로 변경되었습니다.");
@@ -75,7 +78,7 @@ const InfoChange = () => {
                 <button
                   className="input-group-text align-self-center mx-1"
                   for="inputGroupFile02"
-                  onClick={()=>upload()}
+                  onClick={() => upload()}
                 >
                   적용
                 </button>
@@ -90,9 +93,12 @@ const InfoChange = () => {
               className="form-control"
               id="formGroupExampleInput"
               value={userEmail}
-              disabled readonly
+              disabled
+              readonly
             ></input>
-            <div className="form-text mb-3 text-start">이메일은 변경할 수 없습니다.</div>
+            <div className="form-text mb-3 text-start">
+              이메일은 변경할 수 없습니다.
+            </div>
 
             <p for="formGroupExampleInput" className="form-label text-start">
               성명
@@ -103,7 +109,7 @@ const InfoChange = () => {
               id="formGroupExampleInput"
               placeholder="변경할 성명"
               value={userRealName}
-              onChange={(e)=>setUserRealName(e.target.value)}
+              onChange={(e) => setUserRealName(e.target.value)}
             ></input>
 
             <p for="formGroupExampleInput" className="form-label text-start">
@@ -114,7 +120,9 @@ const InfoChange = () => {
               className="form-control mb-4"
               id="formGroupExampleInput"
               placeholder="변경 할 사용자 이름 "
-              onChange={(e)=>{setUserName(e.target.value)}}
+              onChange={(e) => {
+                setUserName(e.target.value);
+              }}
               value={userName}
             ></input>
 
@@ -127,7 +135,7 @@ const InfoChange = () => {
               id="formGroupExampleInput"
               placeholder="전화번호 "
               value={userTel}
-              onChange={(e)=>setUserTel(e.target.value)}
+              onChange={(e) => setUserTel(e.target.value)}
             ></input>
 
             <button type="button" className="btn btn-primary">

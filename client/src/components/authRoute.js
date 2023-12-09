@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 
@@ -16,7 +16,7 @@ function Auth(SpecificComponent, option, adminRoute = null) {
         timeout: "10000",
       }).then((response) => {
         setLoading(false);
-    
+
         if (!response.data.isLogin) {
           if (option) {
             navigate("/login");
@@ -41,9 +41,9 @@ function Auth(SpecificComponent, option, adminRoute = null) {
     if (loading) {
       // 로딩 중일 때의 UI를 반환할 수 있습니다.
       return (
-        <div class="text-center m-auto">
-          <div class="spinner-border" role="status">
-            <span class="visually-hidden">Loading...</span>
+        <div className="text-center m-auto">
+          <div className="spinner-border" role="status">
+            <span className="visually-hidden">Loading...</span>
           </div>
         </div>
       );
