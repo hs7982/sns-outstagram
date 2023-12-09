@@ -7,16 +7,7 @@ const PwChange = () => {
   const [oriPassword, setOriPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [reNewPassword, setReNewPassword] = useState("");
-
-  const appendAlert = (message, type) => {
-    const alertPlaceholder = document.getElementById("liveAlertPlaceholder");
-    alertPlaceholder.innerHTML = [
-      `<div className="alert alert-${type} alert-dismissible fade show" role="alert">`,
-      `   <div><i className="bi bi-exclamation-triangle-fill"></i> ${message}</div>`,
-      '   <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
-      "</div>",
-    ].join("");
-  };
+  const [error, setError] = useState(null);
 
   const pwChangeProcess = (event) => {
     event.preventDefault();
@@ -34,19 +25,20 @@ const PwChange = () => {
       })
         .then((result) => {
           if (result.status === 200) {
-            console.log(result.data);
-            appendAlert(result.data, "info");
+            setError(null);
+            alert(result.data);
+            window.location.reload();
           } else if (result.status === 403) {
-            appendAlert("아이디와 비밀번호가 일치하지 않습니다.", "warning");
+            setError("아이디와 비밀번호가 일치하지 않습니다.");
           }
         })
         .catch((error) => {
           if (error.response) {
-            appendAlert(error.response.data, "warning");
+            setError(error.response.data);
           }
         });
     } else {
-      appendAlert("아이디와 비밀번호를 입력해주세요", "warning");
+      setError("아이디와 비밀번호를 입력해주세요");
     }
   };
 
@@ -90,7 +82,12 @@ const PwChange = () => {
         <Link to="/findpw">
           <p>비밀번호를 잊으셨나요?</p>
         </Link>
-        <div id="liveAlertPlaceholder"></div>
+        {error && (
+          <div className="alert alert-warning mx-5" role="alert">
+            <i className="bi bi-exclamation-triangle-fill"> </i>
+            {error}
+          </div>
+        )}
         <Link>
           <button
             type="button"

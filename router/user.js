@@ -18,8 +18,8 @@ const {
   isFollowing,
   getFollowerList,
   followingList,
-  searchComment,
   searchUser,
+  userInfoChage,
 } = require("../controller/user");
 
 router.post("/login", login);
@@ -29,6 +29,8 @@ router.post("/logout", logout);
 router.post("/singup", singup);
 
 router.post("/pwChange", pwChange);
+
+router.post("/userInfoChange", userInfoChage);
 
 router.post("/leaveId", leaveId);
 

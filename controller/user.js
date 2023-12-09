@@ -4,6 +4,13 @@ const db = require("../database/db");
 const session = require("express-session");
 const upload = require("../multUpload");
 
+//사용자 정보 입력값 검증 정규표현식
+const usernameRegex = /^[a-zA-Z0-9_.-]+$/; // 영어 알파벳, 숫자, -, _ 포함
+const nameRegex = /^[a-zA-Z가-힣\s]+$/; // 영어 알파벳, 한글, 공백만 포함
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // 이메일 유효성 검사
+const telRegex = /^[0-9-]+$/; // 전화번호 유효성 검사
+const passwordRegex = /^(?=.*[\d@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/; // 비밀번호 유효성 검사를 위한 정규 표현식
+
 const login = (req, res) => {
   const { email, password } = req.body;
   db.query(
@@ -75,13 +82,6 @@ const logout = (req, res) => {
 
 const singup = (req, res) => {
   const { name, userName, tel, email, password } = req.body;
-
-  //사용자 입력값 유효성 검사
-  const usernameRegex = /^[a-zA-Z0-9_.-]+$/; // 영어 알파벳, 숫자, -, _ 포함
-  const nameRegex = /^[a-zA-Z가-힣\s]+$/; // 영어 알파벳, 한글, 공백만 포함
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // 이메일 유효성 검사
-  const telRegex = /^[0-9-]+$/; // 전화번호 유효성 검사
-  const passwordRegex = /^(?=.*[\d@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/; // 비밀번호 유효성 검사를 위한 정규 표현식
 
   if (!nameRegex.test(name) || name.length < 2) {
     return res
@@ -182,43 +182,61 @@ const getUserInfo = (req, res) => {
 const pwChange = (req, res) => {
   if (!req.session.isLogin)
     return res.status(401).json({ error: "로그인이 필요합니다." });
+
   const userId = req.session.userIdNo;
   const { oriPassword, newPassword, reNewPassword } = req.body;
-  if (newPassword === reNewPassword) {
-    if (newPassword !== oriPassword) {
-      db.query(
-        "select user_id_no, user_password from user where user_id_no = ?",
-        [userId],
-        (err, results) => {
-          if (err) {
-            console.log(err);
-            res.status(500).json("server error");
-          } else if (oriPassword === results[0].user_password) {
-            db.query(
-              "update user set user_password=? where user_id_no=?",
-              [newPassword, userId],
-              (err, results) => {
-                if (err) {
-                  console.log(err);
-                  res.status(500).json("server error");
-                } else {
-                  res.status(200).json("비밀번호 변경에 성공하였습니다.");
-                }
-              }
-            );
-          } else {
-            res.status(400).json("현재 비밀번호가 일치하지 않습니다.");
-          }
-        }
-      );
-    } else {
-      res.status(400).json("현재 비밀번호와 변경할 비밀번호가 동일합니다.");
-    }
-  } else {
-    res
+
+  //사용자 입력값 검증단계
+  if (newPassword !== reNewPassword) {
+    return res
       .status(400)
       .json("비밀번호 재입력란이 새로운 비밀번호와 일치하지 않습니다.");
   }
+  if (!passwordRegex.test(newPassword)) {
+    return res
+      .status(400)
+      .json(
+        "비밀번호는 최소 6자 이상이어야 하며, 영어, 숫자, 특수문자를 반드시 포함해야 합니다."
+      );
+  }
+  if (newPassword === oriPassword) {
+    return res
+      .status(400)
+      .json("현재 비밀번호와 변경할 비밀번호가 동일합니다.");
+  }
+
+  //변경수행
+  db.query(
+    "select user_id_no, user_password from user where user_id_no = ?",
+    [userId],
+    (err, results) => {
+      if (err) {
+        console.log(err);
+        res.status(500).json("server error");
+      } else if (oriPassword === results[0].user_password) {
+        db.query(
+          "update user set user_password=? where user_id_no=?",
+          [newPassword, userId],
+          (err, results) => {
+            if (err) {
+              console.log(err);
+              res.status(500).json("server error");
+            } else {
+              res.status(200).json("비밀번호 변경에 성공하였습니다.");
+            }
+          }
+        );
+      } else {
+        res.status(400).json("현재 비밀번호가 일치하지 않습니다.");
+      }
+    }
+  );
+};
+
+const userInfoChage = (req, res) => {
+  if (!req.session.isLogin)
+    return res.status(401).json({ error: "로그인이 필요합니다." });
+  const userId = req.session.userIdNo;
 };
 
 const leaveId = (req, res) => {
@@ -489,6 +507,7 @@ module.exports = {
   getFollowerList,
   followingList,
   searchUser,
+  userInfoChage,
 
   changeProfileImg,
 };
