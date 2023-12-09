@@ -6,16 +6,7 @@ export const UserContext = createContext(null);
 export function UserProvider({ children }) {
   const [user, setUser] = useState({isLogin:false,userName:null});
 
-  // useEffect(() => {
-  //   const storedUser = localStorage.getItem('user');
-  //   if (storedUser) {
-  //     console.log(storedUser);
-  //     setUser(JSON.parse(storedUser));
-  //   }
-  // }, []);
-
   useEffect(() => {
-    //const storedUser = localStorage.getItem('user');
     axios({
       url: "/api/user/myInfo",
       method: "GET",

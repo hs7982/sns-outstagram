@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../database/db");
 
-const { login, logout, singup, getmyinfo, pwChange, leaveId, getUserInfo, changeProfileImg, followUser, unfollowUser,getFollowerNum,followingNum, isFollowing, getFollowerList, followingList  } = require("../controller/user");
+const { login, logout, singup, getmyinfo, pwChange, leaveId, getUserInfo, changeProfileImg, followUser, unfollowUser,getFollowerNum,followingNum, isFollowing, getFollowerList, followingList, searchComment  } = require("../controller/user");
 
 
 

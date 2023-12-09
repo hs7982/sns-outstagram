@@ -218,7 +218,7 @@ const Home = () => {
               className="feed-item card text-start mx-auto mb-5 shadow-sm"
               style={{ width: "768px", maxWidth: "95%", maxHeight: "800px" }}
             >
-              <div className="card-header d-flex">
+              <div className="card-header d-flex bg-white">
                 <div className="fw-bold mb-0 me-auto">
                   <Link
                     to={"/profile/" + post.post_user_id}
@@ -235,7 +235,7 @@ const Home = () => {
                   </Link>
                 </div>
 
-                <div className="dropdown">
+                <div className="dropdown my-auto">
                   <Link
                     href="#"
                     className="d-flex align-items-center text-black text-decoration-none"

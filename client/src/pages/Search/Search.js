@@ -16,12 +16,10 @@ const Search = () => {
     switch (currSearch) {
       case "게시물":
         return "/api/posts/search/" + keyword;
-      case "사용자":
-        return "/api/user/search/" + keyword;
-      case "태그":
-        return "api/posts/tag/search/" + keyword;
-      case "장소":
-        return "api/posts/place/search/" + keyword;
+      case "댓글":
+        return "api/posts/searchComment/" + keyword;
+        case "사용자":
+          return "/api/user/searchUser/" + keyword;
       default:
         break;
     }
@@ -79,7 +77,7 @@ const Search = () => {
         </form>
         <div className="my-3 container text-center">
           <div className="d-flex">
-            {["게시물", "사용자", "태그", "장소"].map((searchType) => (
+            {["게시물", "댓글",  "사용자"].map((searchType) => (
               <div
                 key={searchType}
                 className={`flex-fill border-dark-subtle border-end ${
@@ -103,6 +101,10 @@ const Search = () => {
               {error}
             </div>
           )}
+
+
+        
+          {currSearch === "게시물"? 
           <div className="container">
             <div className="row row-cols-4" id="result">
               {searchResult.map((message) => (
@@ -114,13 +116,49 @@ const Search = () => {
                       style={{ width: "330px", height: "330px" }}
                       alt=""
                     />
-                  </Link>
+                  </Link>             
                 </div>
-              ))}
+              ))}              
+            </div>           
+          </div>:null}
+          
+          {currSearch === "댓글"? 
+          <div className="container">
+          <div className="row row-cols-4" id="result">
+          {searchResult.map((message) => (
+                <div key={message.comment_content} className="col p-3" style={{ width: "330px", height: "330px" }}>
+                  <Link to={`/postView/${message.comment_post_id}`}>
+
+                    {message.comment_conent}
+                  </Link>             
+                </div>
+              ))}                    
             </div>
-          </div>
+          </div>:null}
+
+
+          {currSearch === "사용자"? 
+          <div className="container">
+          <div className="row row-cols-4" id="result">
+          {searchResult.map((message) => (
+                <div key={message.user_name} className="col p-3" style={{ width: "330px", height: "330px" }}>
+                  <Link to={`/profile/${message.user_id_no}`}>
+                    
+                    {message.user_name}
+                  </Link>             
+                </div>
+              ))}                    
+            </div>
+          </div>:null}
+
+
         </div>
       </div>
+      
+     
+     
+
+
       {/* Additional content or spacing can be added here */}
     </div>
   );

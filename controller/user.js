@@ -1,5 +1,5 @@
 //const userDatabase = require("../Database");
-const { response } = require("express");
+const { response, json } = require("express");
 const db = require("../database/db");
 const session = require("express-session");
 const upload = require("../multUpload");
@@ -340,7 +340,7 @@ const followingNum = (req, res) => {
 
       const followCount = results[0].followCount;
 
-      // 팔로우 갯수를 클라이언트에게 반환
+      // 팔로잉 갯수를 클라이언트에게 반환
       return res.status(200).json(followCount);
     });
   } else {
@@ -420,6 +420,8 @@ const isFollowing = (req, res) => {
   }
 };
 
+
+
 module.exports = {
   login,
   logout,
@@ -435,6 +437,6 @@ module.exports = {
   isFollowing,
   getFollowerList,
   followingList,
-
+  
   changeProfileImg,
 };

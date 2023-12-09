@@ -255,7 +255,7 @@ const PostView = () => {
                 className="feed-item card text-start mx-auto mx-5 shadow-sm"
                 style={{ width: "768px", maxWidth: "100%", height: "80vh" }}
               >
-                <div className="card-header d-flex">
+                <div className="card-header d-flex bg-white">
                   <div className="fw-bold mb-0 me-auto">
                     <Link
                       to={"/profile/" + post.post_user_id}
@@ -271,7 +271,7 @@ const PostView = () => {
                       {post.user_name}
                     </Link>
                   </div>
-                  <div className="dropdown">
+                  <div className="dropdown my-auto">
                     <Link
                       href="#"
                       className="d-flex align-items-center text-black text-decoration-none"
@@ -282,14 +282,14 @@ const PostView = () => {
                     </Link>
 
                     <ul className="dropdown-menu dropdown-menu text-small shadow">
-                    <li>
-                      <Link
-                        className="dropdown-item"
-                        to={"/profile/" + post.post_user_id}
-                      >
-                        <i className="bi bi-person-circle"></i> 프로필 보기
-                      </Link>
-                    </li>
+                      <li>
+                        <Link
+                          className="dropdown-item"
+                          to={"/profile/" + post.post_user_id}
+                        >
+                          <i className="bi bi-person-circle"></i> 프로필 보기
+                        </Link>
+                      </li>
                       <li>
                         <Link className="dropdown-item" to="">
                           <i className="bi bi-pencil-square"></i> 수정
@@ -418,13 +418,18 @@ const PostView = () => {
                   {Array.isArray(CommentList) && CommentList.length > 0 ? (
                     CommentList.map((oneComment, index) => (
                       <div key={index} className="d-flex mb-3">
-                        <img
-                          src={`/api/upload/profile/${oneComment.user_image}`}
-                          alt=""
-                          width="32"
-                          height="32"
-                          className="rounded-circle me-2 bg-secondary-subtle object-fit-cover border"
-                        />
+                        <Link
+                          to={"/profile/" + oneComment.comment_user_id}
+                          className="text-decoration-none text-dark"
+                        >
+                          <img
+                            src={`/api/upload/profile/${oneComment.user_image}`}
+                            alt=""
+                            width="32"
+                            height="32"
+                            className="rounded-circle me-2 bg-secondary-subtle object-fit-cover border"
+                          />
+                        </Link>
                         <div>
                           <div className="fw-bold">{oneComment.user_name}</div>
                           <p className="mx-2">{oneComment.comment_conent}</p>

@@ -315,6 +315,42 @@ const searchPost = (req, res) => {
 
 }
 
+// 검색에서 댓글 검색해서 조회하기
+const searchComment = (req, res) => {
+  const keyword ="%"+req.params.keyword+"%";
+  db.query("SELECT * FROM `outstagram`.`post_comment` WHERE comment_conent LIKE ?", [keyword], (err, results) => {
+    if (err) {
+      res.status(500).json("서버에러입니다.");
+      console.log(err);
+    };
+    if (results.length > 0) {
+      res.status(200).json(results);
+
+    } else {
+      res.status(204).json("조회된 댓글이 없습니다.");
+    }
+  });
+
+}
+
+//검색에서 사용자 검색해서 조회하기
+const searchUser = (req, res) => {
+  const keyword ="%"+req.params.keyword+"%";
+  db.query("SELECT * FROM `outstagram`.`user` WHERE user_name LIKE ?", [keyword], (err, results) => {
+    if (err) {
+      res.status(500).json("서버에러입니다.");
+      console.log(err);
+    };
+    if (results.length > 0) {
+      res.status(200).json(results);
+
+    } else {
+      res.status(204).json("조회된 사용자가 없습니다.");
+    }
+  });
+
+}
+
 const writeNewPost = [
   upload.array("PostImages"),
   (req, res) => {
@@ -359,5 +395,7 @@ module.exports = {
   getComment,
   postReport,
   getLikeList,
-  getUserPost
+  getUserPost,
+  searchComment,
+  searchUser
 };
