@@ -1,12 +1,14 @@
 import React, { useContext } from "react";
 import { UserContext } from "../components/UserContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Logout = () => {
   const user = useContext(UserContext);
+  const navigate = useNavigate();
 
   const logoutProcess = (event) => {
     user.logout();
+    navigate("/login");
   };
 
   return (

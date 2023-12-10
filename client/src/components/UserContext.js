@@ -1,5 +1,7 @@
 import React, { createContext, useState, useEffect } from "react";
+
 import axios from "axios";
+import { toast } from "react-toastify";
 
 export const UserContext = createContext(null);
 
@@ -33,11 +35,10 @@ export function UserProvider({ children }) {
       .then((response) => {
         setUser({ isLogin: false, userName: null });
         localStorage.removeItem("user");
-        window.open("/", "_self");
-        alert("로그아웃되었습니다.");
+        toast("🔓 로그아웃되었습니다.", { type: "success", autoClose: 2500 });
       })
       .catch((error) => {
-        alert("로그아웃 실패" + error.data);
+        toast("로그아웃 중 오류가 발생하였습니다.", { type: "error" });
       });
   };
 
