@@ -13,9 +13,9 @@ export default function Login({ changeNav }) {
   const appendAlert = (message, type) => {
     const alertPlaceholder = document.getElementById("liveAlertPlaceholder");
     alertPlaceholder.innerHTML = [
-      `<div className="alert alert-${type} alert-dismissible fade show" role="alert">`,
-      `   <div><i className="bi bi-exclamation-triangle-fill"></i> ${message}</div>`,
-      '   <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+      `<div class="alert alert-${type} alert-dismissible fade show" role="alert">`,
+      `   <div><i class="bi bi-exclamation-triangle-fill"></i> ${message}</div>`,
+      '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
       "</div>",
     ].join("");
   };
@@ -36,7 +36,6 @@ export default function Login({ changeNav }) {
         .then((result) => {
           if (result.status === 200) {
             login(result.data);
-            console.log(result.data);
             window.open("/", "_self");
             appendAlert("로그인에 성공하였습니다.", "info");
           } else if (result.status === 403) {

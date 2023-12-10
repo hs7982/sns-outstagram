@@ -18,16 +18,19 @@ function Auth(SpecificComponent, option, adminRoute = null) {
         setLoading(false);
 
         if (!response.data.isLogin) {
+          //로그인X
           if (option) {
+            //(true)인증이 필요한 페이지: api 호출결과 로그인상태X -> /login으로 이동처리
             navigate("/login");
           }
         } else {
+          //로그인O
           if (adminRoute && !response.data.isAdmin) {
-            navigate("/"); // 이 부분을 수정하여 다른 경로로 이동하도록 변경 가능
+            //Admin라우트: Admin권한 없을때 -> /로 이동처리
+            navigate("/");
           } else {
-            // 인증이 필요한 페이지에 접근할 때 해당 페이지로 유지
-            if (option && location.pathname === "/login") {
-              navigate(location.pathname);
+            if (location.pathname === "/login") {
+              window.open("/", "_self");
             }
             // 추가적인 조건을 통해 다른 인증이 필요한 페이지 처리 가능
             // else if (option && location.pathname === "/someOtherAuthPage") {
@@ -39,7 +42,7 @@ function Auth(SpecificComponent, option, adminRoute = null) {
     }, [location.pathname, navigate, option, adminRoute]);
 
     if (loading) {
-      // 로딩 중일 때의 UI를 반환할 수 있습니다.
+      // 로딩 중일 때의 UI를 반환
       return (
         <div className="text-center m-auto">
           <div className="spinner-border" role="status">
@@ -49,7 +52,7 @@ function Auth(SpecificComponent, option, adminRoute = null) {
       );
     }
 
-    // 인증 확인이 완료된 후에만 SpecificComponent를 반환합니다.
+    // 인증 확인이 완료된 후에만 SpecificComponent를 반환
     return <SpecificComponent />;
   }
 

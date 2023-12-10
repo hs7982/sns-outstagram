@@ -55,7 +55,6 @@ const PostView = () => {
       timeout: 5000,
     })
       .then(async (result) => {
-        console.log("성공", result);
         setLikeStatus(!liked);
         const count = await getLikeCount(postId);
         setLikeCount(count);

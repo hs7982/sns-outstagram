@@ -51,6 +51,6 @@ router.get("/post/:id", getPost);
 
 router.get("/searchComment/:keyword", searchComment);
 
-router.delete("/post/:", delPost);
+router.delete("/post/:id", delPost);
 
 module.exports = router;

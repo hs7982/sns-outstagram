@@ -9,9 +9,9 @@ const WritePost = () => {
   const appendAlert = (message, type) => {
     const alertPlaceholder = document.getElementById("liveAlertPlaceholder");
     alertPlaceholder.innerHTML = [
-      `<div className="alert alert-${type} alert-dismissible fade show" role="alert">`,
-      `   <div><i className="bi bi-exclamation-triangle-fill"></i> ${message}</div>`,
-      '   <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+      `<div class="alert alert-${type} alert-dismissible fade show" role="alert">`,
+      `   <div><i class="bi bi-exclamation-triangle-fill"></i> ${message}</div>`,
+      '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
       "</div>",
     ].join("");
   };

@@ -11,7 +11,6 @@ const Search = () => {
 
   useEffect(() => {
     performSearch();
-    console.log(searchResult);
   }, [currSearch]);
 
   const currKeyword = () => {

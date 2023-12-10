@@ -15,14 +15,15 @@ export default function Singup({ changeNav }) {
   const appendAlert = (message, type) => {
     const alertPlaceholder = document.getElementById("liveAlertPlaceholder");
     alertPlaceholder.innerHTML = [
-      `<div className="alert alert-${type} alert-dismissible fade show" role="alert">`,
-      `   <div><i className="bi bi-exclamation-triangle-fill"></i> ${message}</div>`,
-      '   <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+      `<div class="alert alert-${type} alert-dismissible fade show" role="alert">`,
+      `   <div><i class="bi bi-exclamation-triangle-fill"></i> ${message}</div>`,
+      '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
       "</div>",
     ].join("");
   };
 
-  const singup = () => {
+  const singup = (e) => {
+    e.preventDefault();
     if (name && userName && tel && email && password && rePassword) {
       if (password === rePassword) {
         axios({
@@ -62,81 +63,93 @@ export default function Singup({ changeNav }) {
     <div className="mt-4 container-xl">
       {" "}
       <h1 className="mb-4">OUTSTAGRAM 가입하기</h1>
-      <div className="form-floating my-3">
-        <input
-          type="text"
-          className="form-control"
-          id="name"
-          placeholder="성명"
-          onChange={(e) => setName(e.target.value)}
-        ></input>
-        <label htmlFor="floatingInput">성명 (ex: 홍길동)</label>
-        <div className="form-text text-start ms-2">
-          실명은 2자 이상이어야 하며 한글과 영어만 허용됩니다.
+      <form>
+        <div className="form-floating my-3">
+          <input
+            type="text"
+            className="form-control"
+            id="name"
+            placeholder="성명"
+            onChange={(e) => setName(e.target.value)}
+            required
+          ></input>
+          <label htmlFor="floatingInput">성명 (ex: 홍길동)</label>
+          <div className="form-text text-start ms-2">
+            실명은 2자 이상이어야 하며 한글과 영어만 허용됩니다.
+          </div>
         </div>
-      </div>
-      <div className="form-floating my-3">
-        <input
-          type="text"
-          className="form-control"
-          id="username"
-          placeholder="사용자 이름"
-          onChange={(e) => setUserName(e.target.value)}
-        ></input>
-        <label htmlFor="floatingInput">사용자 이름(계정명)</label>
-        <div className="form-text text-start ms-2">
-          사용자 이름은 3자이상 이여야하며, 영어와 숫자, 일부 특수문자(-, _,
-          .)만 허용됩니다. )
+        <div className="form-floating my-3">
+          <input
+            type="text"
+            className="form-control"
+            id="username"
+            placeholder="사용자 이름"
+            onChange={(e) => setUserName(e.target.value)}
+            required
+          ></input>
+          <label htmlFor="floatingInput">사용자 이름(계정명)</label>
+          <div className="form-text text-start ms-2">
+            사용자 이름은 3자이상 이여야하며, 영어와 숫자, 일부 특수문자(-, _,
+            .)만 허용됩니다.
+          </div>
         </div>
-      </div>
-      <div className="form-floating my-3">
-        <input
-          type="tel"
-          className="form-control"
-          id="tel"
-          placeholder="전화번호"
-          onChange={(e) => setTel(e.target.value)}
-        ></input>
-        <label htmlFor="floatingInput">전화번호</label>
-      </div>
-      <div className="form-floating my-3">
-        <input
-          type="email"
-          className="form-control"
-          id="email"
-          placeholder="이메일"
-          onChange={(e) => setEmail(e.target.value)}
-        ></input>
-        <label htmlFor="floatingInput">이메일</label>
-      </div>
-      <div className="form-floating my-3">
-        <input
-          type="password"
-          className="form-control"
-          id="password"
-          placeholder="비밀번호"
-          onChange={(e) => setPassword(e.target.value)}
-        ></input>
-        <label htmlFor="floatingInput">비밀번호</label>
-        <div className="form-text text-start ms-2">
-          비밀번호는 최소 6자 이상이어야 하며, 영어, 숫자, 특수문자를 반드시
-          포함해야 합니다.
+        <div className="form-floating my-3">
+          <input
+            type="tel"
+            className="form-control"
+            id="tel"
+            placeholder="전화번호"
+            onChange={(e) => setTel(e.target.value)}
+            required
+          ></input>
+          <label htmlFor="floatingInput">전화번호</label>
         </div>
-      </div>
-      <div className="form-floating my-3">
-        <input
-          type="password"
-          className="form-control"
-          id="repassword"
-          placeholder="비밀번호 확인"
-          onChange={(e) => setRePassword(e.target.value)}
-        ></input>
-        <label htmlFor="floatingInput">비밀번호 확인</label>
-      </div>
-      <div id="liveAlertPlaceholder"></div>
-      <button type="button" className="btn btn-primary" onClick={singup}>
-        가입
-      </button>
+        <div className="form-floating my-3">
+          <input
+            type="email"
+            className="form-control"
+            id="email"
+            placeholder="이메일"
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          ></input>
+          <label htmlFor="floatingInput">이메일</label>
+        </div>
+        <div className="form-floating my-3">
+          <input
+            type="password"
+            className="form-control"
+            id="password"
+            placeholder="비밀번호"
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          ></input>
+          <label htmlFor="floatingInput">비밀번호</label>
+          <div className="form-text text-start ms-2">
+            비밀번호는 최소 6자 이상이어야 하며, 영어, 숫자, 특수문자를 반드시
+            포함해야 합니다.
+          </div>
+        </div>
+        <div className="form-floating my-3">
+          <input
+            type="password"
+            className="form-control"
+            id="repassword"
+            placeholder="비밀번호 확인"
+            onChange={(e) => setRePassword(e.target.value)}
+            required
+          ></input>
+          <label htmlFor="floatingInput">비밀번호 확인</label>
+        </div>
+        <div id="liveAlertPlaceholder"></div>
+        <button
+          type="submit"
+          className="btn btn-primary"
+          onClick={(e) => singup(e)}
+        >
+          가입
+        </button>
+      </form>
       <div>
         <div>
           <p className="text-secondary mt-3">

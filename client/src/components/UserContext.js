@@ -11,7 +11,7 @@ export function UserProvider({ children }) {
       url: "/api/user/myInfo",
       method: "GET",
       withCredentials: true,
-      timeout: 5000,
+      timeout: 10000,
     }).then((response) => {
       setUser(response.data);
       localStorage.setItem("user", JSON.stringify(response.data));

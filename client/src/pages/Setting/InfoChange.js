@@ -37,7 +37,6 @@ const InfoChange = () => {
           },
         }
       );
-      console.log(response);
 
       if (response.status === 200) {
         alert("프로필 사진이 성공적으로 변경되었습니다.");

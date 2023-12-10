@@ -52,7 +52,7 @@ app.use(
 app.use((err, req, res, next) => {
   console.log("error middleware");
   console.log(err.toString());
-  res.send(err.toString());
+  res.status(500).json({ error: "Internal Server Error" });
 });
 
 app.use("/api/user", user);

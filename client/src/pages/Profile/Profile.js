@@ -15,6 +15,8 @@ const Profile = () => {
   const [userPosts, setUserPosts] = useState([]);
   const [isErr, setIsErr] = useState(false);
   const [isNoUser, setIsNoUser] = useState(false);
+  const [renderFollowModal, setRenderFollowModal] = useState(false);
+  const [isLoading, setLoding] = useState(true);
 
   useEffect(() => {
     async function fetchData() {
@@ -87,8 +89,12 @@ const Profile = () => {
         if (postsResult.status === 200) {
           setUserPosts(postsResult.data);
         }
+
+        setLoding(false);
+        setRenderFollowModal(true);
       } catch (error) {
         setIsErr(true);
+        setLoding(false);
         console.error("데이터를 가져오는 중 오류:", error);
       }
     }
@@ -190,11 +196,6 @@ const Profile = () => {
                   <div className="p-3 fs-4">팔로워 </div>
                   <div>{followerCount}</div>
                 </Link>
-                <FollowModal
-                  userId={userId}
-                  type={"follower"}
-                  count={followerCount}
-                />
               </div>
 
               <div
@@ -206,13 +207,23 @@ const Profile = () => {
                   <div className="p-3 fs-4">팔로잉 </div>
                   <div>{followingCount}</div>
                 </Link>
+              </div>
+            </div>
+
+            {renderFollowModal && ( // renderFollowModal이 true일 때 FollowModal을 렌더링
+              <>
+                <FollowModal
+                  userId={userId}
+                  type={"follower"}
+                  count={followerCount}
+                />
                 <FollowModal
                   userId={userId}
                   type={"following"}
                   count={followingCount}
                 />
-              </div>
-            </div>
+              </>
+            )}
 
             <div>
               {isFollowing === null ? (
@@ -243,6 +254,9 @@ const Profile = () => {
         </div>
         <div>
           <hr />
+          {isLoading ? (
+            <div>로딩 중...</div>
+          ) : ""}
           <div className="container text-center">
             <div className="row row-cols-1 row-cols-md-4 g-4 ">
               {userPosts.map((post, index) => (

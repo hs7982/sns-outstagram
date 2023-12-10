@@ -73,7 +73,6 @@ const Home = () => {
       timeout: 5000,
     })
       .then(async (result) => {
-        console.log("성공", result);
         setLikeStatus((prevLikeStatus) => ({
           ...prevLikeStatus,
           [postId]: !liked,

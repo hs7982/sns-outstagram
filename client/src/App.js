@@ -52,7 +52,7 @@ function App() {
       <main className="d-flex flex-nowrap">
         <h1 className="visually-hidden">OUTSTAGRAM</h1>
 
-        {showNav && <AuthNavbar />}
+        {showNav && <Navbar />}
         <div className="flex-column w-100 overflow-y-auto">
           <div className="w-100 d-md-none" style={{ height: "80px" }}></div>
 
