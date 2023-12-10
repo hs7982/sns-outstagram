@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import SettingNav from "./SettingNav";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const PwChange = () => {
   const [oriPassword, setOriPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [reNewPassword, setReNewPassword] = useState("");
-  const [error, setError] = useState(null);
 
   const pwChangeProcess = (event) => {
     event.preventDefault();
@@ -25,20 +25,19 @@ const PwChange = () => {
       })
         .then((result) => {
           if (result.status === 200) {
-            setError(null);
             alert(result.data);
             window.location.reload();
           } else if (result.status === 403) {
-            setError("아이디와 비밀번호가 일치하지 않습니다.");
+            toast("아이디와 비밀번호가 일치하지 않습니다.", { type: "warning" });
           }
         })
         .catch((error) => {
           if (error.response) {
-            setError(error.response.data);
+            toast(error.response.data, { type: "error" });
           }
         });
     } else {
-      setError("아이디와 비밀번호를 입력해주세요");
+      toast("아이디와 비밀번호를 입력해주세요.", { type: "warning" });
     }
   };
 
@@ -82,12 +81,6 @@ const PwChange = () => {
         <Link to="/findpw">
           <p>비밀번호를 잊으셨나요?</p>
         </Link>
-        {error && (
-          <div className="alert alert-warning mx-5" role="alert">
-            <i className="bi bi-exclamation-triangle-fill"> </i>
-            {error}
-          </div>
-        )}
         <Link>
           <button
             type="button"

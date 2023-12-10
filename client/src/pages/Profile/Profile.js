@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { UserContext } from "../../components/UserContext";
 import FollowModal from "./FollowModal";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const Profile = () => {
   const user = useContext(UserContext);
@@ -116,6 +117,7 @@ const Profile = () => {
       });
 
       if (result.status === 201) {
+        toast("🤝 " + userData.user_name +"님을 팔로우합니다!", { type: "success" });
         setIsFollowing(true);
       }
     } catch (error) {
@@ -135,6 +137,7 @@ const Profile = () => {
       });
 
       if (result.status === 200) {
+        toast(userData.user_name +"님을 언팔로우합니다😢", { type: "success" });
         setIsFollowing(false);
       }
     } catch (error) {
