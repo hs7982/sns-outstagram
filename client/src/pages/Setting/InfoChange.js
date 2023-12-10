@@ -45,7 +45,7 @@ const InfoChange = () => {
 
       if (response.status === 200) {
         toast("프로필 사진이 변경되었습니다.", { type: "success" });
-        window.location.reload();
+        navigate("/setting");
       } else {
         // 업로드 실패한 경우 처리
         toast("프로필 사진 변경에 실패했습니다.", { type: "error" });

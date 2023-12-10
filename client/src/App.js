@@ -27,14 +27,14 @@ import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const [showNav, setShowNav] = useState(true);
-  const location = useLocation();
+  // const location = useLocation();
 
-  useEffect(() => {
-    const closeNavPath = ["/login", "/singup", "/findpw"];
-    if (closeNavPath.includes(location.pathname)) {
-      setShowNav(false);
-    } else setShowNav(true);
-  }, [location.pathname]);
+  // useEffect(() => {
+  //   const closeNavPath = ["/login", "/singup", "/findpw"];
+  //   if (closeNavPath.includes(location.pathname)) {
+  //     setShowNav(false);
+  //   } else setShowNav(true);
+  // }, [location.pathname]);
 
   /*auth 관리
     ex)const AuthHome = Auth(Home, true) 
