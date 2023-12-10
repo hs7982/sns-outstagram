@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 function Auth(SpecificComponent, option, adminRoute = null) {
   function AuthenticationCheck() {
@@ -21,6 +22,9 @@ function Auth(SpecificComponent, option, adminRoute = null) {
           //로그인X
           if (option) {
             //(true)인증이 필요한 페이지: api 호출결과 로그인상태X -> /login으로 이동처리
+            toast("로그인이 필요합니다.", {
+              type: "warning",
+            });
             navigate("/login");
           }
         } else {
@@ -29,9 +33,9 @@ function Auth(SpecificComponent, option, adminRoute = null) {
             //Admin라우트: Admin권한 없을때 -> /로 이동처리
             navigate("/");
           } else {
-            if (location.pathname === "/login") {
-              window.open("/", "_self");
-            }
+            // if (location.pathname === "/login") {
+            //   window.open("/", "_self");
+            // }
             // 추가적인 조건을 통해 다른 인증이 필요한 페이지 처리 가능
             // else if (option && location.pathname === "/someOtherAuthPage") {
             //   navigate(location.pathname);

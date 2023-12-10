@@ -1,26 +1,17 @@
 import React from "react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 
-export default function Singup({ changeNav }) {
-  changeNav();
+export default function Singup() {
+  const navigate = useNavigate();
   const [name, setName] = useState("");
   const [userName, setUserName] = useState("");
   const [tel, setTel] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rePassword, setRePassword] = useState("");
-
-  const appendAlert = (message, type) => {
-    const alertPlaceholder = document.getElementById("liveAlertPlaceholder");
-    alertPlaceholder.innerHTML = [
-      `<div class="alert alert-${type} alert-dismissible fade show" role="alert">`,
-      `   <div><i class="bi bi-exclamation-triangle-fill"></i> ${message}</div>`,
-      '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
-      "</div>",
-    ].join("");
-  };
 
   const singup = (e) => {
     e.preventDefault();
@@ -41,21 +32,22 @@ export default function Singup({ changeNav }) {
         })
           .then((result) => {
             if (result.status === 201) {
-              appendAlert(result.data, "info");
-              alert("계정 생성이 완료되었습니다. 로그인해주세요.");
-              window.open("/login", "_self");
+              toast("계정생성이 완료되었습니다🙌 로그인해주세요!", {
+                type: "success",
+              });
+              navigate("/login");
             }
           })
           .catch((error) => {
             if (error.response) {
-              appendAlert(error.response.data, "warning");
+              toast(error.response.data, { type: "warning", autoClose: 7000 });
             }
           });
       } else {
-        appendAlert("비밀번호 확인값이 일치하지 않습니다.", "warning");
+        toast("비밀번호 확인값이 일치하지 않습니다.", { type: "warning" });
       }
     } else {
-      appendAlert("모든 항목을 입력해주세요.", "warning");
+      toast("모든 항목을 입력해주세요.", { type: "warning" });
     }
   };
 
@@ -141,7 +133,6 @@ export default function Singup({ changeNav }) {
           ></input>
           <label htmlFor="floatingInput">비밀번호 확인</label>
         </div>
-        <div id="liveAlertPlaceholder"></div>
         <button
           type="submit"
           className="btn btn-primary"

@@ -98,7 +98,6 @@ const Profile = () => {
         console.error("데이터를 가져오는 중 오류:", error);
       }
     }
-
     if (userId === undefined) {
       setUserId(user.user.userIdNo);
     } else {
@@ -184,7 +183,7 @@ const Profile = () => {
             <div className="d-flex justify-content-between mb-4">
               <div className="col">
                 <div className="p-3 fs-4">게시물</div>
-                <div>0</div>
+                <div>{userPosts.length}</div>
               </div>
 
               <div

@@ -1,20 +1,13 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const WritePost = () => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [selectedImagesURL, setSelectedImagesURL] = useState([]);
   const [content, setContent] = useState("");
-
-  const appendAlert = (message, type) => {
-    const alertPlaceholder = document.getElementById("liveAlertPlaceholder");
-    alertPlaceholder.innerHTML = [
-      `<div class="alert alert-${type} alert-dismissible fade show" role="alert">`,
-      `   <div><i class="bi bi-exclamation-triangle-fill"></i> ${message}</div>`,
-      '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
-      "</div>",
-    ].join("");
-  };
+  const navigate = useNavigate();
 
   const onSelectFile = (e) => {
     e.preventDefault();
@@ -84,22 +77,18 @@ const WritePost = () => {
           },
         });
 
-        appendAlert("게시물이 성공적으로 업로드되었습니다.", "info");
-        alert("게시물이 성공적으로 업로드되었습니다.");
-        window.open("/", "_self");
+        toast("게시물이 업로드되었습니다.", { type: "success" });
+        navigate("/");
 
         // 업로드 후 상태 초기화
         setSelectedFiles([]);
         setSelectedImagesURL([]);
         setContent("");
       } catch (error) {
-        appendAlert(
-          "게시물 작성 중 오류가 발생하였습니다<br/>" + error.response.data,
-          "danger"
-        );
+        toast("게시물 업로드 중 오류가 발생하였습니다", { type: "error" });
       }
     } else {
-      appendAlert("업로드할 사진과 내용을 모두 입력해주세요.", "warning");
+      toast("업로드할 사진과 내용을 모두 입력해주세요.", { type: "warning" });
     }
   };
 
@@ -130,7 +119,6 @@ const WritePost = () => {
           rows={10}
           onChange={(e) => setContent(e.target.value)}
         />
-        <div id="liveAlertPlaceholder"></div>
         <button
           className="btn btn-primary mt-5"
           type="button"

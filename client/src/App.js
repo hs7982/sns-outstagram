@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import Home from "./pages/HomeFeed/Home";
 import NotFound from "./pages/NotFound";
 import "./App.css";
@@ -22,11 +22,20 @@ import Search from "./pages/Search/Search";
 import Admin from "./pages/Admin";
 import PostView from "./pages/HomeFeed/PostView";
 
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 function App() {
   const [showNav, setShowNav] = useState(true);
-  const changeNav = () => {
-    setShowNav(false);
-  };
+  const location = useLocation();
+
+  useEffect(() => {
+    const closeNavPath = ["/login", "/singup", "/findpw"];
+    if (closeNavPath.includes(location.pathname)) {
+      setShowNav(false);
+    } else setShowNav(true);
+  }, [location.pathname]);
+
   /*auth 관리
     ex)const AuthHome = Auth(Home, true) 
     - null: 아무나 출입이 가능한 페이지
@@ -52,6 +61,8 @@ function App() {
       <main className="d-flex flex-nowrap">
         <h1 className="visually-hidden">OUTSTAGRAM</h1>
 
+        <ToastContainer />
+
         {showNav && <Navbar />}
         <div className="flex-column w-100 overflow-y-auto">
           <div className="w-100 d-md-none" style={{ height: "80px" }}></div>
@@ -59,9 +70,9 @@ function App() {
           <Routes>
             <Route path="/" element={<AuthHome />} />
 
-            <Route path="/singup" element={<Singup changeNav={changeNav} />} />
-            <Route path="/login" element={<Login changeNav={changeNav} />} />
-            <Route path="/findpw" element={<FindPw changeNav={changeNav} />} />
+            <Route path="/singup" element={<Singup />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/findpw" element={<FindPw />} />
             <Route path="/setting" element={<Info />} />
 
             <Route path="/setting/pwchange" element={<AuthPwChange />} />
@@ -81,7 +92,7 @@ function App() {
             <Route path="/postView/:postId" element={<AuthPostView />} />
 
             {/* **항상 최하단위치 여기 아래론 라우트 X** */}
-            <Route path="/*" element={<NotFound changeNav={changeNav} />} />
+            <Route path="/*" element={<NotFound />} />
           </Routes>
         </div>
       </main>

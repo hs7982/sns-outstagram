@@ -1,8 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const FindPw = ({ changeNav }) => {
-  changeNav();
+const FindPw = () => {
   return (
     <div className="mx-auto" style={{ width: "100%" }}>
       <p className=" my-3 fw-bold">비밀번호를 재설정하시겠습니까?</p>

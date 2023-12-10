@@ -19,7 +19,7 @@ const login = (req, res) => {
     (err, results) => {
       if (err) {
         console.error("Error executing SQL query:", err);
-        return res.status(500).json({ error: "Internal Server Error" });
+        return res.status(500).json("Internal Server Error");
       }
       if (results.length > 0) {
         req.session.isLogin = true;
@@ -36,9 +36,7 @@ const login = (req, res) => {
           userProfileImg: results[0].user_image,
         });
       } else {
-        res
-          .status(403)
-          .json("Not Authorized: 해당 정보와 일치하는 계정이 없습니다.");
+        res.status(403).json("해당 정보와 일치하는 계정이 없습니다.");
       }
     }
   );

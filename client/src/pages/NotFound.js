@@ -1,7 +1,6 @@
 import React from "react";
 
-const NotFound = ({ changeNav }) => {
-  changeNav();
+const NotFound = () => {
   return (
     <div className="mx-auto my-5">
       <i className="bi bi-exclamation-diamond fs-1"></i>

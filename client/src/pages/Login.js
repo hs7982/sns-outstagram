@@ -1,24 +1,15 @@
 import React from "react";
 import { useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { UserContext } from "../components/UserContext";
+import { toast } from "react-toastify";
 
-export default function Login({ changeNav }) {
-  changeNav();
+export default function Login() {
   const { login } = useContext(UserContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  const appendAlert = (message, type) => {
-    const alertPlaceholder = document.getElementById("liveAlertPlaceholder");
-    alertPlaceholder.innerHTML = [
-      `<div class="alert alert-${type} alert-dismissible fade show" role="alert">`,
-      `   <div><i class="bi bi-exclamation-triangle-fill"></i> ${message}</div>`,
-      '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
-      "</div>",
-    ].join("");
-  };
+  const navigate = useNavigate();
 
   const loginProcess = (event) => {
     event.preventDefault();
@@ -36,19 +27,25 @@ export default function Login({ changeNav }) {
         .then((result) => {
           if (result.status === 200) {
             login(result.data);
-            window.open("/", "_self");
-            appendAlert("로그인에 성공하였습니다.", "info");
-          } else if (result.status === 403) {
-            appendAlert("아이디와 비밀번호가 일치하지 않습니다.", "warning");
+            navigate("/");
+            toast(result.data.userName + "님 환영합니다!", {
+              type: "success",
+              autoClose: 1500,
+            });
           }
         })
         .catch((error) => {
           if (error.response) {
-            appendAlert(error.response.data, "warning");
+            if (error.response.status === 403)
+              toast(error.response.data, { type: "warning", autoClose: 2500 });
+            else toast(error.response.data, { type: "error" });
           }
         });
     } else {
-      appendAlert("아이디와 비밀번호를 입력해주세요", "warning");
+      toast("아이디와 비밀번호를 입력해주세요", {
+        type: "warning",
+        autoClose: 2500,
+      });
     }
   };
 

@@ -2,19 +2,24 @@ import React, { useContext, useState } from "react";
 import { UserContext } from "../../components/UserContext";
 import SettingNav from "./SettingNav";
 import axios from "axios";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const InfoChange = () => {
+  const navigate = useNavigate();
   const user = useContext(UserContext);
   const [userRealName, setUserRealName] = useState(user.user.userRealName);
   const [userName, setUserName] = useState(user.user.userName);
   const [userTel, setUserTel] = useState(user.user.userTel);
   const [userEmail, setUserEmail] = useState(user.user.userEmail);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [profileImage, setprofileImage] = useState(user.user.userProfileImg);
 
   const fileChange = (e) => {
     e.preventDefault();
     const file = e.target.files[0];
     setSelectedFile(file);
+    toast("프로필 이미지가 선택되었습니다.적용버튼을 눌러주세요.", { type: "info" });
   };
 
   const upload = async () => {
@@ -39,14 +44,15 @@ const InfoChange = () => {
       );
 
       if (response.status === 200) {
-        alert("프로필 사진이 성공적으로 변경되었습니다.");
+        toast("프로필 사진이 변경되었습니다.", { type: "success" });
         window.location.reload();
       } else {
         // 업로드 실패한 경우 처리
-        alert("프로필 사진 변경에 실패했습니다.");
+        toast("프로필 사진 변경에 실패했습니다.", { type: "error" });
       }
     } catch (error) {
       console.error("오류 발생:", error);
+      toast("오류가 발생하였습니다.", { type: "error" });
     }
   };
   return (
@@ -62,7 +68,7 @@ const InfoChange = () => {
               <p className="text-start">프로필 사진</p>
               <div className="d-flex">
                 <img
-                  src={"/api/upload/profile/" + user.user.userProfileImg}
+                  src={"/api/upload/profile/" + profileImage}
                   alt=""
                   width="100"
                   height="100"
