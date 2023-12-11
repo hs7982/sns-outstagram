@@ -7,6 +7,7 @@ const WritePost = () => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [selectedImagesURL, setSelectedImagesURL] = useState([]);
   const [content, setContent] = useState("");
+  const [isUploading, setUploading] = useState(false);
   const navigate = useNavigate();
 
   const onSelectFile = (e) => {
@@ -61,6 +62,7 @@ const WritePost = () => {
 
   const postSubmit = async () => {
     if (selectedFiles.length > 0 && content.trim() !== "") {
+      setUploading(true);
       try {
         const formData = new FormData();
         formData.append("content", content);
@@ -71,7 +73,7 @@ const WritePost = () => {
 
         await axios.post("/api/posts/new", formData, {
           withCredentials: true,
-          timeout: 5000,
+          timeout: 30000,
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -86,6 +88,7 @@ const WritePost = () => {
         setContent("");
       } catch (error) {
         toast("게시물 업로드 중 오류가 발생하였습니다", { type: "error" });
+        setUploading(false)
       }
     } else {
       toast("업로드할 사진과 내용을 모두 입력해주세요.", { type: "warning" });
@@ -119,6 +122,7 @@ const WritePost = () => {
           rows={10}
           onChange={(e) => setContent(e.target.value)}
         />
+        {!isUploading ? 
         <button
           className="btn btn-primary mt-5"
           type="button"
@@ -126,7 +130,14 @@ const WritePost = () => {
           onClick={postSubmit}
         >
           게시하기
-        </button>
+        </button> : <button
+          className="btn btn-primary mt-5"
+          type="button"
+          id="inputGroupFileAddon04"
+          disabled
+        >
+          업로드중...
+        </button>}
       </div>
     </div>
   );
