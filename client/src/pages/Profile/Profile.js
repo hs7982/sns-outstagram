@@ -117,7 +117,9 @@ const Profile = () => {
       });
 
       if (result.status === 201) {
-        toast("🤝 " + userData.user_name +"님을 팔로우합니다!", { type: "success" });
+        toast("🤝 " + userData.user_name + "님을 팔로우합니다!", {
+          type: "success",
+        });
         setIsFollowing(true);
       }
     } catch (error) {
@@ -137,7 +139,9 @@ const Profile = () => {
       });
 
       if (result.status === 200) {
-        toast(userData.user_name +"님을 언팔로우합니다😢", { type: "success" });
+        toast(userData.user_name + "님을 언팔로우합니다😢", {
+          type: "success",
+        });
         setIsFollowing(false);
       }
     } catch (error) {
@@ -258,27 +262,31 @@ const Profile = () => {
           <hr />
           {isLoading ? (
             <div>로딩 중...</div>
-          ) : 
-          <div className="container text-center">
-          {userPosts.length !== 0 ? (
-            <div className="row row-cols-1 row-cols-md-4 g-4 ">
-              {userPosts.map((post, index) => (
-                <div key={index} className="col profile-square px-1">
-                  <Link to={`/postView/${post.post_id}`}>
-                    <div className="card h-100">
-                      <img
-                        src={`/api/upload/${
-                          JSON.parse(post.post_image_url)[0]
-                        }`}
-                        className="inner d-block object-fit-cover rounded"
-                        alt={`Post ${index + 1}`}
-                      />
+          ) : (
+            <div className="container text-center">
+              {userPosts.length !== 0 ? (
+                <div className="row row-cols-1 row-cols-md-4 g-4 ">
+                  {userPosts.map((post, index) => (
+                    <div key={index} className="col profile-square px-1">
+                      <Link to={`/postView/${post.post_id}`}>
+                        <div className="card h-100">
+                          <img
+                            src={`/api/upload/${
+                              JSON.parse(post.post_image_url)[0]
+                            }`}
+                            className="inner d-block object-fit-cover rounded"
+                            alt={`Post ${index + 1}`}
+                          />
+                        </div>
+                      </Link>
                     </div>
-                  </Link>
+                  ))}
                 </div>
-              ))}
-            </div> ) : <div>작성한 게시물이 없습니다.</div>}
-          </div>}
+              ) : (
+                <div>작성한 게시물이 없습니다.</div>
+              )}
+            </div>
+          )}
         </div>
       </div>
     );

@@ -26,16 +26,6 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function App() {
-  const [showNav, setShowNav] = useState(true);
-  // const location = useLocation();
-
-  // useEffect(() => {
-  //   const closeNavPath = ["/login", "/singup", "/findpw"];
-  //   if (closeNavPath.includes(location.pathname)) {
-  //     setShowNav(false);
-  //   } else setShowNav(true);
-  // }, [location.pathname]);
-
   /*auth 관리
     ex)const AuthHome = Auth(Home, true) 
     - null: 아무나 출입이 가능한 페이지
@@ -43,11 +33,9 @@ function App() {
     - false: 로그인한 유저는 출입 불가능한 페이지
   */
   const AuthHome = Auth(Home, true);
-
   const AuthLogout = Auth(Logout, true);
   const AuthPwChange = Auth(PwChange, true);
   const AuthInfoChange = Auth(InfoChange, true);
-  const AuthNavbar = Auth(Navbar, null);
   const AuthService = Auth(Service, true);
   const AuthSearch = Auth(Search, true);
   const AuthLeaveAccount = Auth(LeaveAccount, true);
@@ -63,7 +51,8 @@ function App() {
 
         <ToastContainer />
 
-        {showNav && <Navbar />}
+        <Navbar />
+
         <div className="flex-column w-100 overflow-y-auto">
           <div className="w-100 d-md-none" style={{ height: "80px" }}></div>
 

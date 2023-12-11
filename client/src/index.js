@@ -7,17 +7,16 @@ import reportWebVitals from "./reportWebVitals";
 import { UserProvider } from "./components/UserContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
-const store = localStorage.getItem('user');
+const store = localStorage.getItem("user");
 root.render(
- // <React.StrictMode>
-    <UserProvider value={store}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </UserProvider>
- // </React.StrictMode>
+  // <React.StrictMode>
+  <UserProvider value={store}>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </UserProvider>
+  // </React.StrictMode>
 );
-
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

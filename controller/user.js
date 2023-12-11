@@ -9,7 +9,8 @@ const usernameRegex = /^[a-zA-Z0-9_.-]+$/; // 영어 알파벳, 숫자, -, _ 포
 const nameRegex = /^[a-zA-Z가-힣\s]+$/; // 영어 알파벳, 한글, 공백만 포함
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // 이메일 유효성 검사
 const telRegex = /^[0-9-]+$/; // 전화번호 유효성 검사
-const passwordRegex = /^(?=.*[~!@#$%^&*])(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d~!@#$%^&*]{6,}$/; // 비밀번호 유효성 검사를 위한 정규 표현식
+const passwordRegex =
+  /^(?=.*[~!@#$%^&*])(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d~!@#$%^&*]{6,}$/; // 비밀번호 유효성 검사를 위한 정규 표현식
 
 const login = (req, res) => {
   const { email, password } = req.body;
@@ -282,8 +283,6 @@ const userInfoChange = (req, res) => {
   );
 };
 
-
-
 const leaveId = (req, res) => {
   if (!req.session.isLogin)
     return res.status(401).json({ error: "로그인이 필요합니다." });
@@ -331,8 +330,7 @@ const changeProfileImg = [
         if (err) {
           res.status(500).json("서버에러입니다.");
           console.log(err);
-        } else
-          res.status(200).json(imageUrls);
+        } else res.status(200).json(imageUrls);
       }
     );
   },

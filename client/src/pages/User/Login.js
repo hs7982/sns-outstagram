@@ -28,7 +28,7 @@ export default function Login() {
           if (result.status === 200) {
             login(result.data);
             navigate("/");
-            toast("🙌 "+result.data.userName + "님 환영합니다!", {
+            toast("🙌 " + result.data.userName + "님 환영합니다!", {
               type: "success",
               autoClose: 1500,
             });

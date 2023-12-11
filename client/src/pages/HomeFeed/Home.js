@@ -169,7 +169,7 @@ const Home = () => {
         if (result.status === 200) {
           // 삭제 성공
           toast("🗑️ 게시물 삭제 완료", { type: "success" });
-          setReload(!reload)
+          setReload(!reload);
         } else {
           // 삭제 실패
           toast("ERROR:게시물 삭제 중 오류가 발생했습니다.", { type: "error" });
@@ -290,10 +290,7 @@ const Home = () => {
                       </Link>
                     </li>
                     {post.post_user_id === user.user.userIdNo ? (
-                     
-                    <div>                
-                  </div>
-
+                      <div></div>
                     ) : (
                       ""
                     )}
@@ -311,7 +308,6 @@ const Home = () => {
                     ) : (
                       ""
                     )}
-                   
                   </ul>
                 </div>
               </div>

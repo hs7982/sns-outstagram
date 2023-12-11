@@ -28,7 +28,9 @@ const PwChange = () => {
             alert(result.data);
             window.location.reload();
           } else if (result.status === 403) {
-            toast("아이디와 비밀번호가 일치하지 않습니다.", { type: "warning" });
+            toast("아이디와 비밀번호가 일치하지 않습니다.", {
+              type: "warning",
+            });
           }
         })
         .catch((error) => {
