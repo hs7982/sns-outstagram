@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams,useNavigate } from "react-router-dom";
 import LikeList from "./LikeList";
 import { UserContext } from "../../components/UserContext";
+import { toast } from "react-toastify";
 
 const PostView = () => {
+  const navigate = useNavigate();
   const user = useContext(UserContext);
   const params = useParams();
   const [postData, setPostData] = useState([]);
@@ -158,18 +160,17 @@ const PostView = () => {
 
         if (result.status === 200) {
           // 삭제 성공
-          alert("게시물이 성공적으로 삭제되었습니다.");
-          window.location.reload();
+          toast("🗑️ 게시물 삭제 완료", { type: "success" });
+          navigate("/");
         } else {
           // 삭제 실패
-          alert("ERROR:게시물 삭제 중 오류가 발생했습니다.");
+          toast("ERROR:게시물 삭제 중 오류가 발생했습니다.", { type: "error" });
         }
       } catch (error) {
         if (error.code === "ERR_BAD_REQUEST") {
-          alert("게시물을 삭제할 권한이 없습니다.");
+          toast("게시물을 삭제할 권한이 없습니다.", { type: "error" });
         } else {
-          console.error("게시물을 삭제하던 중 오류:", error);
-          alert("게시물 삭제 중 오류가 발생했습니다.");
+          toast("ERROR:게시물 삭제 중 오류가 발생했습니다.", { type: "error" });
         }
       }
     } else {
@@ -292,11 +293,7 @@ const PostView = () => {
                         </Link>
                       </li>
                       {post.post_user_id === user.user.userIdNo ? (
-                        <li>
-                          <Link className="dropdown-item" to="">
-                            <i className="bi bi-pencil-square"></i> 수정
-                          </Link>
-                        </li>
+                        <div></div>
                       ) : (
                         ""
                       )}
@@ -314,11 +311,6 @@ const PostView = () => {
                       ) : (
                         ""
                       )}
-                      <li>
-                        <Link className="dropdown-item" to="">
-                          <i className="bi bi-flag"></i> 이 게시물 신고하기
-                        </Link>
-                      </li>
                     </ul>
                   </div>
                 </div>

@@ -13,13 +13,15 @@ const InfoChange = () => {
   const [userTel, setUserTel] = useState(user.user.userTel);
   const [userEmail, setUserEmail] = useState(user.user.userEmail);
   const [selectedFile, setSelectedFile] = useState(null);
-  const [profileImage, setprofileImage] = useState(user.user.userProfileImg);
+  const [profileImage, setProfileImage] = useState(user.user.userProfileImg);
 
   const fileChange = (e) => {
     e.preventDefault();
     const file = e.target.files[0];
     setSelectedFile(file);
-    toast("프로필 이미지가 선택되었습니다.적용버튼을 눌러주세요.", { type: "info" });
+    toast("프로필 이미지가 선택되었습니다. 적용버튼을 눌러주세요.", {
+      type: "info",
+    });
   };
 
   const upload = async () => {
@@ -31,12 +33,11 @@ const InfoChange = () => {
     formData.append("profileImage", selectedFile);
 
     try {
-      // 서버에 POST 요청 보내기
+      // 서버에 프로필 이미지 변경 요청 보내기
       const response = await axios.post(
         "/api/user/changeProfileImg",
         formData,
         {
-          method: "POST",
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -45,14 +46,36 @@ const InfoChange = () => {
 
       if (response.status === 200) {
         toast("프로필 사진이 변경되었습니다.", { type: "success" });
-        navigate("/setting");
+        setProfileImage(response.data); // 서버에서 반환한 프로필 이미지 업데이트
       } else {
-        // 업로드 실패한 경우 처리
         toast("프로필 사진 변경에 실패했습니다.", { type: "error" });
       }
     } catch (error) {
       console.error("오류 발생:", error);
       toast("오류가 발생하였습니다.", { type: "error" });
+    }
+  };
+
+  const changeInfo = async () => {
+    try {
+      // 서버에 사용자 정보 변경 요청 보내기
+      const response = await axios.post("/api/user/userInfoChange", {
+        user_name: userName,
+        user_real_name: userRealName,
+        user_tel: userTel,
+      });
+
+      if (response.status === 200) {
+        // toast("사용자 정보가 변경되었습니다.", { type: "success" });
+        // navigate("/setting");
+        alert("사용자 정보가 변경되었습니다.");
+        window.open("/setting", "_self");
+      } else {
+        toast("사용자 정보 변경에 실패했습니다.", { type: "error" });
+      }
+    } catch (error) {
+      console.error("오류 발생:", error);
+      toast(error.response.data, { type: "error" });
     }
   };
   return (
@@ -143,7 +166,11 @@ const InfoChange = () => {
               onChange={(e) => setUserTel(e.target.value)}
             ></input>
 
-            <button type="button" className="btn btn-primary">
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={() => changeInfo()}
+            >
               변경
             </button>
           </div>

@@ -9,7 +9,7 @@ const usernameRegex = /^[a-zA-Z0-9_.-]+$/; // 영어 알파벳, 숫자, -, _ 포
 const nameRegex = /^[a-zA-Z가-힣\s]+$/; // 영어 알파벳, 한글, 공백만 포함
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // 이메일 유효성 검사
 const telRegex = /^[0-9-]+$/; // 전화번호 유효성 검사
-const passwordRegex = /^(?=.*[\d@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/; // 비밀번호 유효성 검사를 위한 정규 표현식
+const passwordRegex = /^(?=.*[~!@#$%^&*])(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d~!@#$%^&*]{6,}$/; // 비밀번호 유효성 검사를 위한 정규 표현식
 
 const login = (req, res) => {
   const { email, password } = req.body;
@@ -231,11 +231,58 @@ const pwChange = (req, res) => {
   );
 };
 
-const userInfoChage = (req, res) => {
-  if (!req.session.isLogin)
+const userInfoChange = (req, res) => {
+  if (!req.session.isLogin) {
     return res.status(401).json({ error: "로그인이 필요합니다." });
+  }
+
   const userId = req.session.userIdNo;
+  const { user_name, user_real_name, user_tel } = req.body;
+
+  // 사용자 입력값 검증
+  if (!nameRegex.test(user_real_name) || user_real_name.length < 2) {
+    return res
+      .status(400)
+      .json("실명은 2자 이상이어야 하며 한글과 영어만 허용됩니다.");
+  }
+
+  if (!usernameRegex.test(user_name) || user_name.length < 3) {
+    return res
+      .status(400)
+      .json(
+        "사용자 이름이 3자 미만이거나 허용되지 않는 문자가 포함되어 있습니다. (허용문자: 영어 알파벳, 숫자, -, _, .)"
+      );
+  }
+
+  if (!telRegex.test(user_tel)) {
+    return res
+      .status(400)
+      .json("전화번호는 숫자와 대시(-)만 입력할 수 있습니다.");
+  }
+
+  // 데이터베이스 업데이트
+  const updateQuery =
+    "UPDATE `outstagram`.`user` SET `user_name`=?, `user_real_name`=?, `user_tel`=? WHERE `user_id_no`=?";
+
+  db.query(
+    updateQuery,
+    [user_name, user_real_name, user_tel, userId],
+    (err, results) => {
+      if (err) {
+        console.error("Error executing SQL query:", err);
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
+
+      if (results.affectedRows > 0) {
+        res.status(200).json("사용자 정보가 성공적으로 업데이트되었습니다.");
+      } else {
+        res.status(400).json("사용자 정보 업데이트에 실패하였습니다.");
+      }
+    }
+  );
 };
+
+
 
 const leaveId = (req, res) => {
   if (!req.session.isLogin)
@@ -285,7 +332,7 @@ const changeProfileImg = [
           res.status(500).json("서버에러입니다.");
           console.log(err);
         } else
-          res.status(200).json("프로필 사진이 성공적으로 업데이트 되었습니다.");
+          res.status(200).json(imageUrls);
       }
     );
   },
@@ -505,7 +552,7 @@ module.exports = {
   getFollowerList,
   followingList,
   searchUser,
-  userInfoChage,
+  userInfoChange,
 
   changeProfileImg,
 };

@@ -3,6 +3,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import LikeList from "./LikeList";
 import { UserContext } from "../../components/UserContext";
+import { toast } from "react-toastify";
 
 const Home = () => {
   const user = useContext(UserContext);
@@ -12,6 +13,7 @@ const Home = () => {
   const [likeStatus, setLikeStatus] = useState({});
   const [likeCount, setLikeCount] = useState({});
   const [feedType, setFeedType] = useState("all");
+  const [reload, setReload] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -56,7 +58,7 @@ const Home = () => {
     };
 
     fetchData();
-  }, [feedType]);
+  }, [feedType, reload]);
 
   const likeClick = (postId, liked) => {
     let methods = "";
@@ -166,18 +168,17 @@ const Home = () => {
 
         if (result.status === 200) {
           // 삭제 성공
-          alert("게시물이 성공적으로 삭제되었습니다.");
-          window.location.reload();
+          toast("🗑️ 게시물 삭제 완료", { type: "success" });
+          setReload(!reload)
         } else {
           // 삭제 실패
-          alert("ERROR:게시물 삭제 중 오류가 발생했습니다.");
+          toast("ERROR:게시물 삭제 중 오류가 발생했습니다.", { type: "error" });
         }
       } catch (error) {
         if (error.code === "ERR_BAD_REQUEST") {
-          alert("게시물을 삭제할 권한이 없습니다.");
+          toast("게시물을 삭제할 권한이 없습니다.", { type: "error" });
         } else {
-          console.error("게시물을 삭제하던 중 오류:", error);
-          alert("게시물 삭제 중 오류가 발생했습니다.");
+          toast("ERROR:게시물 삭제 중 오류가 발생했습니다.", { type: "error" });
         }
       }
     } else {
@@ -289,11 +290,10 @@ const Home = () => {
                       </Link>
                     </li>
                     {post.post_user_id === user.user.userIdNo ? (
-                      <li>
-                        <Link className="dropdown-item" to="">
-                          <i className="bi bi-pencil-square"></i> 수정
-                        </Link>
-                      </li>
+                     
+                    <div>                
+                  </div>
+
                     ) : (
                       ""
                     )}
@@ -311,11 +311,7 @@ const Home = () => {
                     ) : (
                       ""
                     )}
-                    <li>
-                      <Link className="dropdown-item" to="">
-                        <i className="bi bi-flag"></i> 이 게시물 신고하기
-                      </Link>
-                    </li>
+                   
                   </ul>
                 </div>
               </div>
