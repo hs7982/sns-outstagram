@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import { Link, useParams,useNavigate } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import LikeList from "./LikeList";
 import { UserContext } from "../../components/UserContext";
 import { toast } from "react-toastify";
@@ -432,7 +432,14 @@ const PostView = () => {
                           />
                         </Link>
                         <div>
-                          <div className="fw-bold">{oneComment.user_name}</div>
+                          <Link
+                            to={"/profile/" + oneComment.comment_user_id}
+                            className="text-decoration-none text-dark"
+                          >
+                            <div className="fw-bold">
+                              {oneComment.user_name}
+                            </div>
+                          </Link>
                           <p className="mx-2">{oneComment.comment_conent}</p>
                           <small className="text-muted">
                             {getDateToKor(oneComment.comment_time)}

@@ -258,8 +258,9 @@ const Profile = () => {
           <hr />
           {isLoading ? (
             <div>로딩 중...</div>
-          ) : ""}
+          ) : 
           <div className="container text-center">
+          {userPosts.length !== 0 ? (
             <div className="row row-cols-1 row-cols-md-4 g-4 ">
               {userPosts.map((post, index) => (
                 <div key={index} className="col profile-square px-1">
@@ -276,8 +277,8 @@ const Profile = () => {
                   </Link>
                 </div>
               ))}
-            </div>
-          </div>
+            </div> ) : <div>작성한 게시물이 없습니다.</div>}
+          </div>}
         </div>
       </div>
     );
