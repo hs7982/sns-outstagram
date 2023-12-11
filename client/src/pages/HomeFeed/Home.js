@@ -208,7 +208,7 @@ const Home = () => {
             <option value="all">✨ 모든 게시물</option>
             <option value="following">🙌 팔로우 중인 사람</option>
           </select>
-          <label for="floatingSelect">피드 표시 방법</label>
+          <label htmlFor="floatingSelect">피드 표시 방법</label>
         </div>
         <div className="fs-3 m-auto">
           <i className="bi bi-exclamation-diamond"></i>
@@ -239,7 +239,7 @@ const Home = () => {
             <option value="all">✨ 모든 게시물</option>
             <option value="following">🙌 팔로우 중인 사람</option>
           </select>
-          <label for="floatingSelect">피드 표시 방법</label>
+          <label htmlFor="floatingSelect">피드 표시 방법</label>
         </div>
         {postData.map((post, index) => {
           const imageUrls = parseImageUrls(post.post_image_url);
