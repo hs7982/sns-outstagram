@@ -126,6 +126,57 @@ const getComment = (req, res) => {
   }
 };
 
+const delComment = (req, res) => {
+  const commentId = req.params.id;
+
+  if (req.session.isLogin) {
+    const userId = req.session.userIdNo;
+
+    const verifiSql =
+      "SELECT `comment_user_id` FROM `outstagram`.`post_comment` WHERE `comment_id` = ?";
+    const verifiValues = [commentId];
+
+    db.query(verifiSql, verifiValues, (err, results) => {
+      if (err) {
+        console.error("Error executing SQL query:", err);
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
+
+      if (results.length > 0) {
+        if (results[0].comment_user_id === userId || req.session.isAdmin === 1) {
+          const sql = "DELETE FROM `outstagram`.`post_comment` WHERE `comment_id` = ?";
+          const values = [commentId];
+
+          db.query(sql, values, (err, results) => {
+            if (err) {
+              console.error("Error executing SQL query:", err);
+              return res.status(500).json({ error: "Internal Server Error" });
+            }
+
+            if (results.affectedRows > 0) {
+              return res
+                .status(200)
+                .json({ ok: "댓글 삭제 완료 : ", commentID: commentId });
+            } else {
+              return res
+                .status(500)
+                .json({ error: "댓글 삭제를 처리할 수 없습니다." });
+            }
+          });
+        } else {
+          //권한없는경우
+          return res.status(403).json({ error: "권한이 없습니다." });
+        }
+      } else {
+        //select문 result가 0개인경우
+        return res.status(400).json({ error: "해당하는 댓글이 없습니다." });
+      }
+    });
+  } else {
+    res.status(401).json({ error: "로그인이 필요합니다." });
+  }
+};
+
 const getPost = (req, res) => {
   const postId = Number(req.params.id);
 
@@ -489,6 +540,7 @@ module.exports = {
   countLikes,
   postComment,
   getComment,
+  delComment,
   postReport,
   getLikeList,
   getUserPost,

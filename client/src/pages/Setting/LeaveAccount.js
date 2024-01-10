@@ -14,12 +14,18 @@ const LeaveAccount = () => {
         data: {
           true: true,
         },
-      }).then((result) => {
-        if (result.status === 200) {
-          alert("계정 탈퇴에 성공하였습니다.\n이용해주셔서 감사합니다.");
-          window.open("/", "_self");
-        }
-      });
+      })
+        .then((result) => {
+          if (result.status === 200) {
+            alert("계정 탈퇴에 성공하였습니다.\n이용해주셔서 감사합니다.");
+            window.open("/", "_self");
+          }
+        })
+        .catch((error) => {
+          if (error.response) {
+            alert("오류! 계정삭제에 실패하였습니다.\n =>" + error.response.data.error);
+          }
+        });
     }
   };
 

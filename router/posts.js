@@ -19,6 +19,7 @@ const {
   searchComment,
   followPosts,
   getLikeInfo,
+  delComment,
 } = require("../controller/posts");
 
 //일반라우팅
@@ -55,5 +56,7 @@ router.get("/post/:id", getPost);
 router.get("/searchComment/:keyword", searchComment);
 
 router.delete("/post/:id", delPost);
+
+router.delete("/comment/:id", delComment);
 
 module.exports = router;

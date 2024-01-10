@@ -305,6 +305,7 @@ const leaveId = (req, res) => {
   if (!req.session.isLogin)
     return res.status(401).json({ error: "로그인이 필요합니다." });
   const userId = req.session.userIdNo;
+  if(req.session.isAdmin) return res.status(400).json({ error: "권한 해지 후 탈퇴하여야 합니다." });
   db.query(
     "DELETE FROM `user` WHERE `user_id_no`=?",
     [userId],

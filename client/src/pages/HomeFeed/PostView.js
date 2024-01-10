@@ -16,6 +16,7 @@ const PostView = () => {
   const [likeCount, setLikeCount] = useState();
   const [CommentList, setCommentList] = useState({});
   const [comment, setComment] = useState();
+  const [reload, setReload] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -40,7 +41,7 @@ const PostView = () => {
     };
 
     fetchData();
-  }, []);
+  }, [reload]);
 
   const likeClick = (postId, liked) => {
     let methods = "";
@@ -177,6 +178,35 @@ const PostView = () => {
     }
   };
 
+  const deleteComment = async (commentId) => {
+    if (window.confirm("정말 이 댓글을 삭제할까요?")) {
+      try {
+        const result = await axios({
+          method: "DELETE",
+          url: `/api/posts/comment/${commentId}`,
+          withCredentials: true,
+          timeout: 5000,
+        });
+
+        if (result.status === 200) {
+          // 삭제 성공
+          toast("🗑️ 댓글 삭제 완료", { type: "success" });
+          setReload(!reload);
+        } else {
+          // 삭제 실패
+          toast("ERROR:댓글 삭제 중 오류가 발생했습니다.", { type: "error" });
+        }
+      } catch (error) {
+        if (error.code === "ERR_BAD_REQUEST") {
+          toast("댓글을 삭제할 권한이 없습니다.", { type: "error" });
+        } else {
+          toast("ERROR:댓글 삭제 중 오류가 발생했습니다.", { type: "error" });
+        }
+      }
+    } else {
+    }
+  };
+
   const postComment = async () => {
     if (comment) {
       const postId = params.postId;
@@ -252,7 +282,7 @@ const PostView = () => {
           const countL = likeCount;
           const modalId = `modal-${post.post_id}`;
           return (
-            <div className="card-group m-3" key={index}>
+            <div className="card-group mx-4 pb-2" key={index}>
               <div
                 className="feed-item card text-start mx-auto mx-5 shadow-sm"
                 style={{ width: "768px", maxWidth: "100%", height: "80vh" }}
@@ -411,7 +441,7 @@ const PostView = () => {
                 <div className="card-header d-flex bg-transparent">
                   <span className="fs-5">이 게시물의 댓글</span>
                 </div>
-                <div className="card-body h-100 overflow-y-auto">
+                <div className="card-body h-100 overflow-y-auto d-flex flex-column">
                   {Array.isArray(CommentList) && CommentList.length > 0 ? (
                     CommentList.map((oneComment, index) => (
                       <div key={index} className="d-flex mb-3">
@@ -427,15 +457,30 @@ const PostView = () => {
                             className="rounded-circle me-2 bg-secondary-subtle object-fit-cover border"
                           />
                         </Link>
-                        <div>
-                          <Link
-                            to={"/profile/" + oneComment.comment_user_id}
-                            className="text-decoration-none text-dark"
-                          >
-                            <div className="fw-bold">
-                              {oneComment.user_name}
-                            </div>
-                          </Link>
+                        <div className="flex-fill">
+                          <div className="d-flex">
+                            <Link
+                              to={"/profile/" + oneComment.comment_user_id}
+                              className="text-decoration-none text-dark"
+                            >
+                              <span className="fw-bold">
+                                {oneComment.user_name}
+                              </span>
+                            </Link>
+                            {oneComment.comment_user_id ===
+                              user.user.userIdNo || user.user.isAdmin ? (
+                              <Link
+                                className="text-decoration-none text-danger ms-auto"
+                                onClick={() =>
+                                  deleteComment(oneComment.comment_id)
+                                }
+                              >
+                                <small>삭제</small>
+                              </Link>
+                            ) : (
+                              ""
+                            )}
+                          </div>
                           <p className="mx-2">{oneComment.comment_conent}</p>
                           <small className="text-muted">
                             {getDateToKor(oneComment.comment_time)}
