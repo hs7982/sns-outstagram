@@ -292,12 +292,8 @@ const PostView = () => {
                           <i className="bi bi-person-circle"></i> 프로필 보기
                         </Link>
                       </li>
-                      {post.post_user_id === user.user.userIdNo ? (
-                        <div></div>
-                      ) : (
-                        ""
-                      )}
-                      {post.post_user_id === user.user.userIdNo ? (
+                      {post.post_user_id === user.user.userIdNo ||
+                      user.user.isAdmin ? (
                         <li>
                           <Link
                             className="dropdown-item"

@@ -165,6 +165,23 @@ const Navbar = () => {
                 설정
               </Link>
             </li>
+            {user.user.isAdmin ? (
+              <li className="nav-item">
+                <Link
+                  className="nav-link  text-danger-emphasis text-decoration-none mb-3 text-start"
+                  to="/admin"
+                  onClick={() => closeNav()}
+                >
+                  <i
+                    className="bi bi-wrench-adjustable me-2"
+                    style={{ fontSize: "1.5rem" }}
+                  ></i>{" "}
+                  관리자
+                </Link>
+              </li>
+            ) : (
+              ""
+            )}
           </ul>
 
           <div className="dropdown ms-2">
@@ -185,7 +202,7 @@ const Navbar = () => {
               <strong>{user.user.userName}</strong>
             </Link>
             <ul className="dropdown-menu dropdown-menu text-small shadow">
-            <li>
+              <li>
                 <Link
                   className="dropdown-item"
                   to="/setting/infochange"
