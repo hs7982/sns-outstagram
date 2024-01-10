@@ -53,7 +53,7 @@ function App() {
 
         <Navbar />
 
-        <div className="flex-column w-100 overflow-y-auto">
+        <div className="flex-column w-100 overflow-y-auto" id="top">
           <div className="w-100 d-md-none" style={{ height: "80px" }}></div>
 
           <Routes>

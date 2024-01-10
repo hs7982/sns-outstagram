@@ -10,55 +10,114 @@ const Home = () => {
   const [postData, setPostData] = useState([]);
   const [isEmptyPost, setEmptyPost] = useState(false);
   const [isError, setError] = useState(false);
+  const [noMore, setNoMore] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [likeStatus, setLikeStatus] = useState({});
   const [likeCount, setLikeCount] = useState({});
   const [feedType, setFeedType] = useState("all");
   const [reload, setReload] = useState(false);
+  const [lastPostId, setLastPostId] = useState();
+  const [page, setPage] = useState(1);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        let url = "";
-        if (feedType === "all") {
-          url = "/api/posts/feed";
-        } else if (feedType === "following") {
-          url = "/api/posts/followFeed";
-        }
+    fetchData();
+  }, [feedType, reload, page]);
 
-        const result = await axios({
-          url: url,
-          method: "GET",
-          withCredentials: true,
-          timeout: 5000,
-        });
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = document.getElementById("top").scrollTop;
+      sessionStorage.setItem("scrollPosition", scrollPosition);
+      if (
+        contentDiv.scrollTop + contentDiv.clientHeight ===
+        contentDiv.scrollHeight
+      ) {
+        // 스크롤이 맨 아래에 도달하면 추가 데이터 로드
 
-        if (result.status === 204) {
-          setEmptyPost(true);
-        } else {
-          setEmptyPost(false);
-          setPostData(result.data);
-          // 각 게시물에 대한 초기 좋아요 상태를 가져옴
-          for (const post of result.data) {
-            const like = await getLike(post.post_id);
-            const count = await getLikeCount(post.post_id);
-            setLikeStatus((prevLikeStatus) => ({
-              ...prevLikeStatus,
-              [post.post_id]: like,
-            }));
-            setLikeCount((prevLikeCount) => ({
-              ...prevLikeCount,
-              [post.post_id]: count,
-            }));
-          }
-        }
-      } catch (error) {
-        setError(true);
-        console.error("게시물을 불러오는 중 오류 발생:", error);
+        if (!loadingMore) {
+          setLoadingMore(true);
+          setPage((prevPage) => prevPage + 1);
+        } else console.log("데이터 로드중.. 추가 로드 방지");
       }
     };
 
-    fetchData();
-  }, [feedType, reload]);
+    const contentDiv = document.getElementById("top");
+    contentDiv.addEventListener("scroll", handleScroll);
+
+    // 페이지 로드 시 저장된 스크롤 위치 불러오기
+    const savedScrollPosition = sessionStorage.getItem("scrollPosition");
+
+    // 스크롤 위치 설정을 setTimeout으로 처리하여 비동기 문제 해결
+    setTimeout(() => {
+      contentDiv.scrollTop = savedScrollPosition || 0;
+    }, 100);
+  }, []);
+
+  const fetchData = async () => {
+    console.log("게시물 데이터 로드 시작");
+    console.log("추가로드 상태: " + loadingMore);
+    console.log("로드 전 postdata: " + postData);
+    console.log("로드 전 lastpostid: " + lastPostId);
+    try {
+      let url = "";
+      if (feedType === "all") {
+        url = "/api/posts/feed";
+      } else if (feedType === "following") {
+        url = "/api/posts/followFeed";
+      }
+      let request = {
+        url: url,
+        method: "GET",
+        withCredentials: true,
+        timeout: 5000,
+      };
+
+      if (!loadingMore) {
+        console.log("추가로드 아니므로 상태 초기화");
+        setPostData([]);
+        setLastPostId(undefined);
+        console.log("초기화 후 postdata: " + postData);
+        console.log("초기화 후 lastpostid: " + lastPostId);
+      } else {
+        request.params = { lastPostId };
+      }
+
+      console.log(request);
+
+      const result = await axios(request);
+
+      if (result.status === 204) {
+        if (lastPostId !== undefined) setNoMore(true);
+        else setEmptyPost(true);
+      } else {
+        setEmptyPost(false);
+        setPostData((prevData) => [...prevData, ...result.data]);
+
+        // 각 게시물에 대한 초기 좋아요 상태를 가져옴
+        for (const post of result.data) {
+          const info = await getLikeInfo(post.post_id);
+          const like = info.likeStatus;
+          const count = info.likeCount;
+          setLikeStatus((prevLikeStatus) => ({
+            ...prevLikeStatus,
+            [post.post_id]: like,
+          }));
+          setLikeCount((prevLikeCount) => ({
+            ...prevLikeCount,
+            [post.post_id]: count,
+          }));
+        }
+
+        const lastId = result.data[result.data.length - 1].post_id;
+        setLastPostId(lastId); // 마지막으로 받은 게시물의 ID를 상태에 저장
+      }
+    } catch (error) {
+      setError(true);
+      console.error("게시물을 불러오는 중 오류 발생:", error);
+    } finally {
+      setLoadingMore(false); // 데이터 로딩이 완료되면 로딩 중 상태를 false로 변경
+    }
+  };
 
   const likeClick = (postId, liked) => {
     let methods = "";
@@ -116,6 +175,22 @@ const Home = () => {
       });
 
       return result.data; //number반환
+    } catch (error) {
+      console.error("좋아요 정보를 가져오는 중 오류:", error);
+      return false; // 에러 발생 시 기본값으로 false 반환
+    }
+  };
+
+  const getLikeInfo = async (postId) => {
+    try {
+      const result = await axios({
+        method: "GET",
+        url: `/api/posts/like/info/${postId}`,
+        withCredentials: true,
+        timeout: 5000,
+      });
+
+      return result.data;
     } catch (error) {
       console.error("좋아요 정보를 가져오는 중 오류:", error);
       return false; // 에러 발생 시 기본값으로 false 반환
@@ -185,6 +260,15 @@ const Home = () => {
     }
   };
 
+  const changeFeedType = (e) => {
+    //피드 타입 변경시 상태 초기화
+    setLastPostId(undefined);
+    setPostData([]);
+
+    //초기화 후 피드타입 변경
+    setFeedType(e);
+  };
+
   const copyClipBoard = (text) => {
     try {
       navigator.clipboard.writeText(text);
@@ -196,6 +280,11 @@ const Home = () => {
     }
   };
 
+  const scrollToTop = () => {
+    const contentDiv = document.getElementById("top");
+    contentDiv.scrollTop = 0;
+  };
+
   if (isEmptyPost)
     return (
       <div>
@@ -203,7 +292,7 @@ const Home = () => {
           <select
             value={feedType}
             className="form-select"
-            onChange={(e) => setFeedType(e.target.value)}
+            onChange={(e) => changeFeedType(e.target.value)}
           >
             <option value="all">✨ 모든 게시물</option>
             <option value="following">🙌 팔로우 중인 사람</option>
@@ -323,7 +412,7 @@ const Home = () => {
                       className={`carousel-item${
                         imageIndex === 0 ? " active" : ""
                       }`}
-                      style={{ height: "432px" }}
+                      style={{ height: "400px" }}
                     >
                       <img
                         src={`/api/upload/${imageUrl}`}
@@ -400,7 +489,8 @@ const Home = () => {
                   to={"/postView/" + post.post_id}
                   className="text-secondary text-decoration-none"
                 >
-                  <span>댓글 및 상세내용 보기</span>
+                  <i class="bi bi-chat-left-dots"></i>{" "}
+                  <span>{post.comment_count}개의 댓글 보기</span>
                 </Link>
               </div>
               <div className="card-footer">
@@ -411,6 +501,26 @@ const Home = () => {
             </div>
           );
         })}
+        {!noMore ? (
+          <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        ) : (
+          <div>더 이상 표시할 콘텐츠가 없습니다.</div>
+        )}
+
+        <button
+          onClick={scrollToTop}
+          className="btn btn-primary btn-floating shadow"
+          style={{
+            position: "fixed",
+            bottom: "20px",
+            right: "20px",
+            zIndex: "1000",
+          }}
+        >
+          <i className="bi bi-arrow-up-circle"></i>
+        </button>
       </div>
     );
 };

@@ -18,6 +18,7 @@ const {
   getUserPost,
   searchComment,
   followPosts,
+  getLikeInfo,
 } = require("../controller/posts");
 
 //일반라우팅
@@ -34,6 +35,8 @@ router.post("/comment", postComment);
 router.get("/comment/:id", getComment);
 
 router.get("/search/:keyword", searchPost);
+
+router.get("/like/info/:id", getLikeInfo);
 
 router.get("/like/count/:id", countLikes);
 

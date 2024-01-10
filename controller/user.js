@@ -29,13 +29,7 @@ const login = (req, res) => {
         (req.session.userName = results[0].user_name),
           (req.session.isAdmin = results[0].user_is_admin),
           req.session.save();
-        res.status(200).json({
-          isLogin: true,
-          userIdNo: results[0].user_id_no,
-          userEmail: results[0].user_email,
-          userName: results[0].user_name,
-          userProfileImg: results[0].user_image,
-        });
+        res.status(200).json(sendUserInfo(results));
       } else {
         res.status(403).json("해당 정보와 일치하는 계정이 없습니다.");
       }
@@ -45,30 +39,54 @@ const login = (req, res) => {
 
 const getmyinfo = (req, res) => {
   if (!req.session.isLogin) return res.status(200).json({ isLogin: false });
+
+  // 사용자 정보 가져오기
   db.query(
     "SELECT * FROM `user` WHERE `user_id_no` = ?",
     [req.session.userIdNo],
     (err, results) => {
       if (err) {
-        console.error("Error executing SQL query:", err);
-        return res.status(500).json({ error: "Internal Server Error" });
+        console.error("SQL 쿼리 실행 중 오류 발생:", err);
+        return res.status(500).json({ error: "내부 서버 오류" });
       }
+
       if (results.length > 0) {
-        res.status(200).json({
-          isLogin: true,
-          userIdNo: results[0].user_id_no,
-          userEmail: results[0].user_email,
-          userName: results[0].user_name,
-          userRealName: results[0].user_real_name,
-          userProfileImg: results[0].user_image,
-          userTel: results[0].user_tel,
-        });
+        // 마지막 로그인 시간 업데이트
+        const now = new Date();
+        db.query(
+          "UPDATE `outstagram`.`user` SET `user_last_login`=? WHERE `user_id_no`=?",
+          [now, req.session.userIdNo],
+          (err, result) => {
+            if (err) {
+              console.error("마지막 로그인 시간 업데이트 오류:", err);
+            }
+          }
+        );
+
+        // 사용자 정보를 응답으로 보내기
+        res.status(200).json(sendUserInfo(results));
       } else {
         res.status(200).json({ isLogin: false });
       }
     }
   );
 };
+
+const sendUserInfo = (results) => {
+  let userInfo = {
+    isLogin: true,
+    userIdNo: results[0].user_id_no,
+    userEmail: results[0].user_email,
+    userName: results[0].user_name,
+    userRealName: results[0].user_real_name,
+    userProfileImg: results[0].user_image,
+    userTel: results[0].user_tel,
+  };
+  const isAdmin = results[0].user_is_admin;
+  if (isAdmin) userInfo.isAdmin = true;
+
+  return userInfo;
+}
 
 const logout = (req, res) => {
   if (!req.session.userIdNo) {

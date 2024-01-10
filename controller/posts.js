@@ -4,37 +4,55 @@ const session = require("express-session");
 const upload = require("../multUpload");
 
 const posts = (req, res) => {
+  const lastPostId = req.query.lastPostId; // 클라이언트가 마지막으로 받은 게시물의 ID
+  const limit = 8; // 한 번에 가져올 게시물 개수
+
   if (req.session.isLogin) {
-    db.query(
-      "SELECT post_id, post_user_id, post_content, post_image_url, post_hits, post_write_date, user_name, user_image FROM post LEFT OUTER JOIN user ON post.post_user_id = user.user_id_no ORDER BY post_write_date desc",
-      (err, results) => {
-        if (err) {
-          console.error("Error executing SQL query:", err);
-          return res.status(500).json({ error: "Internal Server Error" });
-        }
-        if (results.length > 0) {
-          res.status(200).json(results);
-        } else {
-          res.status(204).json("조회된 게시물이 없습니다.");
-        }
+    let query =
+      "SELECT post.post_id, post.post_user_id, post.post_content, post.post_image_url, post.post_hits, post.post_write_date, user.user_name, user.user_image, COUNT(comment.comment_id) AS comment_count \
+    FROM post \
+    LEFT OUTER JOIN user ON post.post_user_id = user.user_id_no \
+    LEFT OUTER JOIN post_comment AS comment ON post.post_id = comment.comment_post_id ";
+    if (lastPostId) query += "WHERE post.post_id < " + lastPostId;
+    query +=
+      " GROUP BY post.post_id \
+    ORDER BY post.post_id DESC \
+    LIMIT " + limit;
+
+    db.query(query, (err, results) => {
+      if (err) {
+        console.error("Error executing SQL query:", err);
+        return res.status(500).json({ error: "Internal Server Error" });
       }
-    );
+      if (results.length > 0) {
+        res.status(200).json(results);
+      } else {
+        res.status(204).json("조회된 게시물이 없습니다.");
+      }
+    });
   } else {
     res.status(401).json("로그인해주세요.");
   }
 };
 
 const followPosts = (req, res) => {
+  const lastPostId = req.query.lastPostId; // 클라이언트가 마지막으로 받은 게시물의 ID
+  const limit = 8; // 한 번에 가져올 게시물 개수
+
   if (req.session.isLogin) {
     const userId = req.session.userIdNo;
 
-    const sql =
-      "SELECT p.post_id, p.post_user_id, p.post_content, p.post_image_url, p.post_hits, p.post_write_date, u.user_name, u.user_image \
-    FROM post p \
-    LEFT JOIN user u ON p.post_user_id = u.user_id_no \
-    WHERE p.post_user_id = ? \
-    OR p.post_user_id IN (SELECT f.followed_user_id FROM follows f WHERE f.user_id = ?) \
-    ORDER BY p.post_write_date DESC ";
+    let sql =
+      "SELECT p.post_id, p.post_user_id, p.post_content, p.post_image_url, p.post_hits, p.post_write_date, u.user_name, u.user_image, COUNT(c.comment_id) AS comment_count\
+    FROM post p\
+    LEFT JOIN user u ON p.post_user_id = u.user_id_no\
+    LEFT JOIN post_comment c ON p.post_id = c.comment_post_id\
+    WHERE (p.post_user_id = ? OR p.post_user_id IN (SELECT f.followed_user_id FROM follows f WHERE f.user_id = ?)) ";
+    if (lastPostId) sql += " AND p.post_id < " + lastPostId;
+    sql +=
+      " GROUP BY p.post_id\
+    ORDER BY p.post_write_date DESC \
+    LIMIT " + limit;
 
     const values = [userId, userId];
 
@@ -344,6 +362,53 @@ const countLikes = (req, res) => {
   }
 };
 
+const getLikeInfo = (req, res) => {
+  const postId = Number(req.params.id);
+
+  if (req.session.isLogin) {
+    const likeUserId = req.session.userIdNo;
+
+    const getLikeQuery =
+      "SELECT * FROM `outstagram`.`post_likes` WHERE like_user_id=? AND like_post_id =?";
+    const getLikeListQuery =
+      "SELECT like_user_id, user_name, user_real_name, user_image FROM `outstagram`.`post_likes` LEFT OUTER JOIN user ON post_likes.like_user_id = user.user_id_no WHERE like_post_id =?";
+    const countLikesQuery =
+      "SELECT * FROM `outstagram`.`post_likes` WHERE like_post_id =?";
+
+    const values = [likeUserId, postId];
+
+    db.query(getLikeQuery, values, (err, likeResults) => {
+      if (err) {
+        console.error("Error executing SQL query:", err);
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
+
+      db.query(getLikeListQuery, [postId], (err, likeListResults) => {
+        if (err) {
+          console.error("Error executing SQL query:", err);
+          return res.status(500).json({ error: "Internal Server Error" });
+        }
+
+        db.query(countLikesQuery, [postId], (err, countResults) => {
+          if (err) {
+            console.error("Error executing SQL query:", err);
+            return res.status(500).json({ error: "Internal Server Error" });
+          }
+
+          const likeStatus = likeResults.length > 0;
+          const likeCount = countResults.length;
+
+          return res
+            .status(200)
+            .json({ likeStatus, likeList: likeListResults, likeCount });
+        });
+      });
+    });
+  } else {
+    res.status(401).json({ error: "로그인이 필요합니다." });
+  }
+};
+
 const searchPost = (req, res) => {
   const keyword = "%" + req.params.keyword + "%";
   db.query(
@@ -428,4 +493,5 @@ module.exports = {
   getLikeList,
   getUserPost,
   searchComment,
+  getLikeInfo,
 };

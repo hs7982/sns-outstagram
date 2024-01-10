@@ -9,6 +9,7 @@ const Navbar = () => {
   const location = useLocation();
 
   useEffect(() => {
+    //nav 보이지 않게할 uri
     const closeNavPath = ["/login", "/singup", "/findpw"];
     if (closeNavPath.includes(location.pathname)) {
       setShowNav(false);
@@ -25,14 +26,14 @@ const Navbar = () => {
   if (showNav)
     return (
       <Fragment>
-        {/* 미디어 쿼리를 사용하여 화면 너비에 따라 버튼 표시 여부 결정 */}
+        {/* 모바일 Nav 토글 및 상단바 */}
         <div
           className="d-md-none position-fixed w-100 bg-light shadow d-flex"
           id="mobile-header"
           style={{ zIndex: 1000 }}
         >
           <button
-            className="navbar-toggler border rounded m-2" // d-md-none 클래스 추가
+            className="navbar-toggler border rounded m-2"
             type="button"
             data-bs-toggle="collapse"
             data-bs-target="#navbarNav"
@@ -184,6 +185,15 @@ const Navbar = () => {
               <strong>{user.user.userName}</strong>
             </Link>
             <ul className="dropdown-menu dropdown-menu text-small shadow">
+            <li>
+                <Link
+                  className="dropdown-item"
+                  to="/setting/infochange"
+                  onClick={() => closeNav()}
+                >
+                  회원정보 변경
+                </Link>
+              </li>
               <li>
                 <Link
                   className="dropdown-item"

@@ -31,6 +31,18 @@ const dbConfig = {
 db.connect((err) => {
   if (err) {
     console.error("DB에 연결하는데 실패하였습니다:", err);
+  } else {
+    console.log("DB 연결 성공");
+    // 매 3시간마다 DB 연결 유지
+    setInterval(() => {
+      db.query('SELECT 1', (error, result) => {
+        if (error) {
+          console.error('DB 연결 유지 중 오류 발생:', error);
+        } else {
+          console.log('DB 연결 유지 성공');
+        }
+      });
+    }, 3 * 60 * 60 * 1000); // 3시간(180분)마다 실행
   }
 });
 
