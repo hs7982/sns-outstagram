@@ -15,8 +15,8 @@ const passwordRegex =
 const login = (req, res) => {
   const { email, password } = req.body;
   db.query(
-    "SELECT * FROM `user` WHERE `user_email` = ? AND `user_password` = ?",
-    [email, password],
+    "SELECT * FROM `user` WHERE (`user_email` = ? OR `user_name` = ?) AND `user_password` = ?",
+    [email, email, password],
     (err, results) => {
       if (err) {
         console.error("Error executing SQL query:", err);

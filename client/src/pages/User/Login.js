@@ -60,10 +60,10 @@ export default function Login() {
             type="email"
             className="form-control"
             id="email"
-            placeholder="이메일"
+            placeholder="이메일 혹은 사용자 이름"
             onChange={(e) => setEmail(e.target.value)}
           ></input>
-          <label htmlFor="floatingInput">이메일</label>
+          <label htmlFor="floatingInput">이메일 혹은 사용자 이름</label>
         </div>
         <div className="form-floating mb-4">
           <input
