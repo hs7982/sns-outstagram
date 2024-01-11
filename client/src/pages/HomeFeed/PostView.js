@@ -223,7 +223,8 @@ const PostView = () => {
         });
 
         if (result.status === 201) {
-          window.location.reload();
+          setReload(!reload);
+          setComment("");
         } else {
           alert("ERROR:댓글 작성중 오류가 발생했습니다.");
         }
@@ -481,7 +482,7 @@ const PostView = () => {
                               ""
                             )}
                           </div>
-                          <p className="mx-2">{oneComment.comment_conent}</p>
+                          <p className="">{oneComment.comment_conent}</p>
                           <small className="text-muted">
                             {getDateToKor(oneComment.comment_time)}
                           </small>
@@ -497,6 +498,7 @@ const PostView = () => {
                 <div className="card-footer input-group flex-nowra bg-transparent">
                   <input
                     type="text"
+                    value={comment}
                     className="form-control"
                     placeholder="댓글을 입력하세요."
                     onChange={(e) => setComment(e.target.value)}

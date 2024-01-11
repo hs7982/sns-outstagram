@@ -485,7 +485,7 @@ const Home = () => {
                   to={"/postView/" + post.post_id}
                   className="text-secondary text-decoration-none"
                 >
-                  <i class="bi bi-chat-left-dots"></i>{" "}
+                  <i className="bi bi-chat-left-dots"></i>{" "}
                   <span>{post.comment_count}개의 댓글 보기</span>
                 </Link>
               </div>
@@ -498,8 +498,8 @@ const Home = () => {
           );
         })}
         {!noMore ? (
-          <div class="spinner-border" role="status">
-            <span class="visually-hidden">Loading...</span>
+          <div className="spinner-border" role="status">
+            <span className="visually-hidden">Loading...</span>
           </div>
         ) : (
           <div>더 이상 표시할 콘텐츠가 없습니다.</div>
