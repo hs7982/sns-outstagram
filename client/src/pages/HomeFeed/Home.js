@@ -37,7 +37,7 @@ const Home = () => {
         if (!loadingMore) {
           setLoadingMore(true);
           setPage((prevPage) => prevPage + 1);
-        } else console.log("데이터 로드중.. 추가 로드 방지");
+        }
       }
     };
 
@@ -54,10 +54,6 @@ const Home = () => {
   }, []);
 
   const fetchData = async () => {
-    console.log("게시물 데이터 로드 시작");
-    console.log("추가로드 상태: " + loadingMore);
-    console.log("로드 전 postdata: " + postData);
-    console.log("로드 전 lastpostid: " + lastPostId);
     try {
       let url = "";
       if (feedType === "all") {
@@ -73,16 +69,11 @@ const Home = () => {
       };
 
       if (!loadingMore) {
-        console.log("추가로드 아니므로 상태 초기화");
         setPostData([]);
         setLastPostId(undefined);
-        console.log("초기화 후 postdata: " + postData);
-        console.log("초기화 후 lastpostid: " + lastPostId);
       } else {
         request.params = { lastPostId };
       }
-
-      console.log(request);
 
       const result = await axios(request);
 
@@ -322,6 +313,7 @@ const Home = () => {
         <div className="form-floating m-2" style={{ width: "13rem" }}>
           <select
             value={feedType}
+            aria-label="피드 표시 방법"
             className="form-select"
             onChange={(e) => setFeedType(e.target.value)}
           >
@@ -365,6 +357,7 @@ const Home = () => {
                     className="d-flex align-items-center text-black text-decoration-none"
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
+                    aria-label="게시물 도구 드롭다운"
                   >
                     <i className="bi bi-three-dots"></i>
                   </Link>
@@ -508,6 +501,7 @@ const Home = () => {
         <button
           onClick={scrollToTop}
           className="btn btn-primary btn-floating shadow"
+          aria-label="맨위로"
           style={{
             position: "fixed",
             bottom: "20px",
