@@ -463,7 +463,7 @@ const getLikeInfo = (req, res) => {
 const searchPost = (req, res) => {
   const keyword = "%" + req.params.keyword + "%";
   db.query(
-    "SELECT * FROM `outstagram`.`post` WHERE post_content LIKE ?",
+    "SELECT * FROM `outstagram`.`post` WHERE post_content LIKE ? ORDER BY post_id DESC",
     [keyword],
     (err, results) => {
       if (err) {
@@ -483,7 +483,7 @@ const searchPost = (req, res) => {
 const searchComment = (req, res) => {
   const keyword = "%" + req.params.keyword + "%";
   db.query(
-    "SELECT comment_id, comment_post_id, comment_user_id, comment_conent, comment_time, user_name, user_image FROM post_comment LEFT OUTER JOIN user ON post_comment.comment_user_id = user.user_id_no WHERE comment_conent LIKE ?",
+    "SELECT comment_id, comment_post_id, comment_user_id, comment_conent, comment_time, user_name, user_image FROM post_comment LEFT OUTER JOIN user ON post_comment.comment_user_id = user.user_id_no WHERE comment_conent LIKE ? ORDER BY comment_id DESC",
     [keyword],
     (err, results) => {
       if (err) {
